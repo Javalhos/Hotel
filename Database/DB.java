@@ -3,7 +3,7 @@ import java.sql.*;
 /**
  * DB
  */
-public class DB {
+public class DB implements Connection {
 
 	public static String host, database, user, password;
 	public static int port;
@@ -17,7 +17,7 @@ public class DB {
 		port = 3306;
 	}
 
-	public static void openConnection() throws SQLException, ClassNotFoundException {
+	public static Connection openConnection() throws SQLException, ClassNotFoundException {
 		String url = "jdbc:mysql://" + host + ":" + port + "/" + database;
 
 		Class.forName("com.mysql.jdbc.Driver");
