@@ -1,5 +1,4 @@
 package Data;
-import java.sql.Date;
 
 public class User {
 	private int cpf;
