@@ -1,5 +1,5 @@
 package Controllers;
 
-public class UserController {
+public class RoomController {
 	// TODO
 }
