@@ -1,9 +1,10 @@
+package Database;
 import java.sql.*;
 
 /**
  * DB
  */
-public class DB implements Connection {
+public class DB {
 
 	public static String host, database, user, password;
 	public static int port;
@@ -21,7 +22,7 @@ public class DB implements Connection {
 		String url = "jdbc:mysql://" + host + ":" + port + "/" + database;
 
 		Class.forName("com.mysql.jdbc.Driver");
-		connection = DriverManager.getConnection(url, user, password);
+		return connection = DriverManager.getConnection(url, user, password);
 	}
 
 	public static void closeConnection() throws SQLException {

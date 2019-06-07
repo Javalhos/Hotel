@@ -2,7 +2,7 @@ package Data;
 
 public class Booking {
 	private int id;
-	private int userCpf;
+	private String userCpf;
 	private int room;
 	private String entryDate;
 	private String departureDate;
@@ -10,7 +10,7 @@ public class Booking {
 	private String status;
 	private float value;
 
-	public Booking(int id, int userCpf, int room, String entryDate, String departureDate, float bookTax, String status, float value) {
+	public Booking(int id, String userCpf, int room, String entryDate, String departureDate, float bookTax, String status, float value) {
 		this.id = id;
 		this.userCpf = userCpf;
 		this.room = room;
@@ -29,11 +29,11 @@ public class Booking {
 		return id;
 	}
 
-	public void setCpf(int cpf) {
+	public void setCpf(String cpf) {
 		this.userCpf = cpf;
 	}
 
-	public int getCpf() {
+	public String getCpf() {
 		return userCpf;
 	}
 

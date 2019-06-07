@@ -4,12 +4,12 @@ public class Accomodation {
 	private int id;
 	private int rentalId; // Id do Aluguel correspondente, se uma reserva existir, este será 0.
 	private int bookingId; // Id da Reserva correspondente, se uma reserva existir, este será 0.
-	private int userCpf;
+	private String userCpf;
 	private int consumedServices;
 	private float totalValue;
 	private String status;
 
-	public Accomodation(int id, int rental, int booking, int cpf, int consumedServices, float total, String status) {
+	public Accomodation(int id, int rental, int booking, String cpf, int consumedServices, float total, String status) {
 		this.id = id;
 		this.rentalId = rental;
 		this.bookingId = booking;
@@ -43,11 +43,11 @@ public class Accomodation {
 		return bookingId;
 	}
 
-	public void setUserCpf(int cpf) {
+	public void setUserCpf(String cpf) {
 		this.userCpf = cpf;
 	}
 
-	public int getUserCpf() {
+	public String getUserCpf() {
 		return userCpf;
 	}
 

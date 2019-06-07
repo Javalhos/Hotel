@@ -1,4 +1,4 @@
-package Models;
+package DAO;
 
 import Data.Services;
 import Database.DB;
@@ -10,14 +10,13 @@ import java.util.ArrayList;
 public class ServicesDAO implements DAO<Services> {
 	private String sql = "";
 
-	public boolean create (Services data) {
+	public boolean create (Services data) throws Exception {
 		sql = "INSERT INTO services" + 
 			"(name, description, value)" +
 			"VALUES (?, ?, ?)";
-
-		Connection connect = DB.openConnection();
-
+			
 		try {
+			Connection connect = DB.openConnection();
 			PreparedStatement pst = connect.prepareStatement(sql);
 
 			pst.setString(1, data.getName());
@@ -32,18 +31,16 @@ public class ServicesDAO implements DAO<Services> {
 				return false;
 			}
 		} catch (Exception e) {
-			//TODO: handle exception
-			return false;
+			throw new Exception("Erro ao criar serviço!", e);
 		}
 	}
 
-	public boolean update (Services data) {
+	public boolean update (Services data) throws Exception {
 		sql = "UPDATE services SET name = ?, description = ?, "
 				+ "value = ?, status = ? WHERE id = ?";
-
-		Connection connect = DB.openConnection();
-
+				
 		try {
+			Connection connect = DB.openConnection();
 			PreparedStatement pst = connect.prepareStatement(sql);
 
 			pst.setInt(0, data.getId());
@@ -59,17 +56,15 @@ public class ServicesDAO implements DAO<Services> {
 				return false;
 			}
  		} catch (Exception e) {
-			//TODO: handle exception
-			return false;
+			throw new Exception("Erro ao atualizar serviço!", e);
 		}
 	}
 
-	public boolean destroy (Services data) {
+	public boolean destroy (Services data) throws Exception {
 		sql = "DELETE FROM services WHERE id = ?";
-
-		Connection connect = DB.openConnection();
-
+		
 		try {
+			Connection connect = DB.openConnection();
 			PreparedStatement pst = connect.prepareStatement(sql);
 
 			pst.setInt(1, data.getId());
@@ -82,34 +77,30 @@ public class ServicesDAO implements DAO<Services> {
 				return false;
 			}
 		} catch (Exception e) {
-			//TODO: handle exception
-			return false;
+			throw new Exception("Erro ao deletar serviço!", e);
 		}
 	}
 
-	public Services search (Services data) {
+	public Services search (Services data) throws Exception {
 		sql = "SELECT * FROM services WHERE id LIKE '%" + data.getId() 
 		+ "%' LIMIT 1";
 
-		Connect connect = DB.openConnection();
-
 		try {
+			Connection connect = DB.openConnection();
 			Statement statement = connect.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
 			return (Services) rs;
 		} catch (Exception e) {
-			//TODO: handle exception
-			return null;
+			throw new Exception("Erro ao pesquisar serviço!", e);
 		}
 	}
 
-	public Collection<Services> list (String where) {
+	public Collection<Services> list (String where) throws Exception {
 		sql = "SELECT * FROM services " + where;
 
-		Connection connect = DB.openConnection();
-
 		try {
+			Connection connect = DB.openConnection();
 			Statement statement = connect.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
@@ -121,8 +112,7 @@ public class ServicesDAO implements DAO<Services> {
 
 			return services;
 		} catch (Exception e) {
-			//TODO: handle exception
-			return null;
+			throw new Exception("Erro ao listar serviços!", e);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package Models;
+package DAO;
 
 import Data.ConsumedServices;
 import Database.DB;
@@ -10,14 +10,13 @@ import java.util.ArrayList;
 public class ConsumedServicesDAO implements DAO<ConsumedServices> {
 	private String sql = "";
 
-	public boolean create (ConsumedServices data) {
+	public boolean create (ConsumedServices data) throws Exception {
 		sql = "INSERT INTO consumed_services" + 
 			"(accomodation_id, service_id, name, value)" +
 			"VALUES (?, ?, ?, ?)";
-
-		Connection connect = DB.openConnection();
-
+			
 		try {
+			Connection connect = DB.openConnection();
 			PreparedStatement pst = connect.prepareStatement(sql);
 
 			pst.setInt(1, data.getAccomodation());
@@ -33,18 +32,16 @@ public class ConsumedServicesDAO implements DAO<ConsumedServices> {
 				return false;
 			}
 		} catch (Exception e) {
-			//TODO: handle exception
-			return false;
+			throw new Exception("Erro ao criar serviço consumido!", e);
 		}
 	}
 
-	public boolean update (ConsumedServices data) {
+	public boolean update (ConsumedServices data) throws Exception {
 		sql = "UPDATE consumed_services SET accomodation_id = ?, service_id = ?, "
 				+ "name  = ?, value = ? WHERE id = ?";
-
-		Connection connect = DB.openConnection();
-
+				
 		try {
+			Connection connect = DB.openConnection();
 			PreparedStatement pst = connect.prepareStatement(sql);
 
 			pst.setInt(0, data.getId());
@@ -61,17 +58,15 @@ public class ConsumedServicesDAO implements DAO<ConsumedServices> {
 				return false;
 			}
  		} catch (Exception e) {
-			//TODO: handle exception
-			return false;
+			throw new Exception("Erro ao atualizar serviço consumido!", e);
 		}
 	}
 
-	public boolean destroy (ConsumedServices data) {
+	public boolean destroy (ConsumedServices data) throws Exception {
 		sql = "DELETE FROM consumed_services WHERE id = ?";
-
-		Connection connect = DB.openConnection();
-
+		
 		try {
+			Connection connect = DB.openConnection();
 			PreparedStatement pst = connect.prepareStatement(sql);
 
 			pst.setInt(1, data.getId());
@@ -84,34 +79,30 @@ public class ConsumedServicesDAO implements DAO<ConsumedServices> {
 				return false;
 			}
 		} catch (Exception e) {
-			//TODO: handle exception
-			return false;
+			throw new Exception("Erro ao deletar serviço consumido!", e);
 		}
 	}
 
-	public ConsumedServices search (ConsumedServices data) {
+	public ConsumedServices search (ConsumedServices data) throws Exception {
 		sql = "SELECT * FROM consumed_services WHERE id LIKE '%" + data.getId() + "%' OR"
 		+ "accomodation_id LIKE '%" + data.getAccomodation() + "%' LIMIT 1";
-
-		Connect connect = DB.openConnection();
-
+		
 		try {
+			Connection connect = DB.openConnection();
 			Statement statement = connect.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
 			return (ConsumedServices) rs;
 		} catch (Exception e) {
-			//TODO: handle exception
-			return null;
+			throw new Exception("Erro ao pesquisar serviço consumido!", e);
 		}
 	}
 
-	public Collection<ConsumedServices> list (String where) {
+	public Collection<ConsumedServices> list (String where) throws Exception {
 		sql = "SELECT * FROM consumed_services " + where;
-
-		Connection connect = DB.openConnection();
-
+		
 		try {
+			Connection connect = DB.openConnection();
 			Statement statement = connect.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
@@ -123,8 +114,7 @@ public class ConsumedServicesDAO implements DAO<ConsumedServices> {
 
 			return consumedServices;
 		} catch (Exception e) {
-			//TODO: handle exception
-			return null;
+			throw new Exception("Erro ao listar serviços consumidos!", e);
 		}
 	}
 }

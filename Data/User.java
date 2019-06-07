@@ -1,7 +1,7 @@
 package Data;
 
 public class User {
-	private int cpf;
+	private String cpf;
 	private String name;
 	private String email;
 	private String password;
@@ -10,7 +10,7 @@ public class User {
 	private String birthday;
 	private String level;
 
-	public User(int cpf, String name, String email, String password, String contactNumber, String address, String birthday, String level) {
+	public User(String cpf, String name, String email, String password, String contactNumber, String address, String birthday, String level) {
 		this.cpf = cpf;
 		this.name = name;
 		this.email = email;
@@ -21,11 +21,11 @@ public class User {
 		this.level = level;
 	}
 
-	public void setCpf(int cpf) {
+	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
 
-	public int getCpf() {
+	public String getCpf() {
 		return cpf;
 	}
 

@@ -2,14 +2,14 @@ package Data;
 
 public class Rental {
 	private int id;
-	private int userCpf;
+	private String userCpf;
 	private int room;
 	private String entryDate;
 	private String departureDate;
 	private String status;
 	private float value;
 
-	public Rental(int id, int userCpf, int room, String entryDate, String departureDate, String status, float value) {
+	public Rental(int id, String userCpf, int room, String entryDate, String departureDate, String status, float value) {
 		this.id = id;
 		this.userCpf = userCpf;
 		this.room = room;
@@ -27,11 +27,11 @@ public class Rental {
 		return id;
 	}
 
-	public void setCpf(int cpf) {
+	public void setCpf(String cpf) {
 		this.userCpf = cpf;
 	}
 
-	public int getCpf() {
+	public String getCpf() {
 		return userCpf;
 	}
 

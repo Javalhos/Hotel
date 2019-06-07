@@ -1,4 +1,4 @@
-package Models;
+package DAO;
 
 // Arquivos
 import Data.User;
@@ -10,20 +10,19 @@ import java.util.Collection;
 import java.util.ArrayList;
 
 public class UserDAO implements DAO<User> {
-	private User user;
 	private String sql = "";
 
 	// Método de inserir
-	public boolean create (User data) {
+	public boolean create (User data) throws Exception {
 		sql = "INSERT INTO users" + "(cpf, name, email, password, contact_number, address, birthday, level)"
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-		Connection connect = DB.openConnection();
-
+				
 		try {
+			Connection connect = DB.openConnection();
 			PreparedStatement pst = connect.prepareStatement(sql);
 
-			pst.setInt(1, data.getCpf());
+			pst.setString(1, data.getCpf());
 			pst.setString(2, data.getName());
 			pst.setString(3, data.getEmail());
 			pst.setString(4, data.getPassword());
@@ -40,18 +39,16 @@ public class UserDAO implements DAO<User> {
 				return false;
 			}
 		} catch (Exception e) {
-			// Fazer log do erro
-			return false;
+			throw new Exception("Erro ao criar usuário!", e);
 		}
 	}
 
-	public boolean update (User data) {
+	public boolean update (User data) throws Exception {
 		sql = "UPDATE users SET name = ?, email = ?, password = ?"
 				+ "contact_number = ?, address = ?, birthday = ?, level = ? WHERE cpf = ?";
-
-		Connection connect = DB.openConnection();
-
+				
 		try {
+			Connection connect = DB.openConnection();
 			PreparedStatement pst = connect.prepareStatement(sql);
 
 			pst.setString(1, data.getName());
@@ -70,20 +67,18 @@ public class UserDAO implements DAO<User> {
 				return false;
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
-			return false;
+			throw new Exception("Erro ao atualizar usuário!", e);
 		}
 	}
 
-	public boolean destroy (User data) {
+	public boolean destroy (User data) throws Exception {
 		sql = "DELETE FROM users WHERE cpf = ?";
-
-		Connection connect = DB.openConnection();
-
+		
 		try {
+			Connection connect = DB.openConnection();
 			PreparedStatement pst = connect.prepareStatement(sql);
 
-			pst.setInt(1, data.getCpf());
+			pst.setString(1, data.getCpf());
 
 			if (pst.executeUpdate() > 0) {
 				DB.closeConnection();
@@ -93,34 +88,30 @@ public class UserDAO implements DAO<User> {
 				return false;
 			}
 		} catch (Exception e) {
-			//TODO: handle exception
-			return false;
+			throw new Exception("Erro ao deletar usuário!", e);
 		}
 	}
 
-	public User search (User data) {
+	public User search (User data) throws Exception {
 		sql = "SELECT * FROM users WHERE cpf LIKE '%" + data + "%' OR" +
 		"email LIKE '%" + data + "%' ORDER BY id_room";
-
-		Connection connect = DB.openConnection();
-
+		
 		try {
+			Connection connect = DB.openConnection();
 			Statement statement = connect.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
 			return (User) rs;
 		} catch (Exception e) {
-			//TODO: handle exception
-			return null;
+			throw new Exception("Erro ao pesquisar usuário!", e);
 		}
 	}
 
-	public Collection<User> list (String where) {
+	public Collection<User> list (String where) throws Exception {
 		sql = "SELECT * FROM users " + where;
-
-		Connection connect = DB.openConnection();
-
+		
 		try {
+			Connection connect = DB.openConnection();
 			Statement statement = connect.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
@@ -131,8 +122,7 @@ public class UserDAO implements DAO<User> {
 
 			return users;
 		} catch (Exception e) {
-			// TODO: handle exception
-			return null;
+			throw new Exception("Erro ao listar usuários!", e);
 		}
 	}
 }

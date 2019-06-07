@@ -1,4 +1,4 @@
-package Models;
+package DAO;
 
 import Data.Room;
 import Database.DB;
@@ -10,14 +10,13 @@ import java.util.ArrayList;
 public class RoomDAO implements DAO<Room> {
 	private String sql = "";
 
-	public boolean create (Room data) {
+	public boolean create (Room data) throws Exception {
 		sql = "INSERT INTO rooms" + 
 			"(room, beds, type, extension_phone, daily_rate, status)" +
 			"VALUES (?, ?, ?, ?, ?, ?)";
-
-		Connection connect = DB.openConnection();
-
+			
 		try {
+			Connection connect = DB.openConnection();
 			PreparedStatement pst = connect.prepareStatement(sql);
 
 			pst.setInt(1, data.getRoom());
@@ -35,18 +34,16 @@ public class RoomDAO implements DAO<Room> {
 				return false;
 			}
 		} catch (Exception e) {
-			//TODO: handle exception
-			return false;
+			throw new Exception("Erro ao criar quarto!", e);
 		}
 	}
 
-	public boolean update (Room data) {
+	public boolean update (Room data) throws Exception {
 		sql = "UPDATE rooms SET beds = ?, type = ?, extension_phone = ?"
 				+ "daily_rate = ?, status = ? WHERE room = ?";
-
-		Connection connect = DB.openConnection();
-
+	
 		try {
+			Connection connect = DB.openConnection();
 			PreparedStatement pst = connect.prepareStatement(sql);
 
 			pst.setInt(0, data.getRoom());
@@ -64,17 +61,15 @@ public class RoomDAO implements DAO<Room> {
 				return false;
 			}
  		} catch (Exception e) {
-			//TODO: handle exception
-			return false;
+			throw new Exception("Erro ao atualizar quarto!", e);
 		}
 	}
 
-	public boolean destroy (Room data) {
+	public boolean destroy (Room data) throws Exception {
 		sql = "DELETE FROM rooms WHERE room = ?";
 
-		Connection connect = DB.openConnection();
-
 		try {
+			Connection connect = DB.openConnection();
 			PreparedStatement pst = connect.prepareStatement(sql);
 
 			pst.setInt(1, data.getRoom());
@@ -87,33 +82,30 @@ public class RoomDAO implements DAO<Room> {
 				return false;
 			}
 		} catch (Exception e) {
-			//TODO: handle exception
-			return false;
+			throw new Exception("Erro ao deletar quarto!", e);
 		}
 	}
 
-	public Room search (Room data) {
+	public Room search (Room data) throws Exception {
 		sql = "SELECT * FROM rooms WHERE room LIKE '%" + data.getRoom() + "%' LIMIT 1";
-
-		Connect connect = DB.openConnection();
-
+	
 		try {
+			Connection connect = DB.openConnection();
 			Statement statement = connect.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
 			return (Room) rs;
 		} catch (Exception e) {
-			//TODO: handle exception
-			return null;
+			throw new Exception("Erro ao pesquisar quarto!", e);
 		}
 	}
 
-	public Collection<Room> list (String where) {
+	public Collection<Room> list (String where) throws Exception {
 		sql = "SELECT * FROM rooms " + where;
 
-		Connection connect = DB.openConnection();
-
+		
 		try {
+			Connection connect = DB.openConnection();
 			Statement statement = connect.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
@@ -125,8 +117,7 @@ public class RoomDAO implements DAO<Room> {
 
 			return rooms;
 		} catch (Exception e) {
-			//TODO: handle exception
-			return null;
+			throw new Exception("Erro ao listar quartos!", e);
 		}
 	}
 }
