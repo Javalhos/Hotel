@@ -8,13 +8,7 @@ public class Room {
 	private String status;
 	private float dailyRate;
 
-	public Room(int beds, int room, String type, String extensionPhone, String status, float dailyRate) {
-		this.beds = beds;
-		this.room = room;
-		this.type = type;
-		this.extensionPhone = extensionPhone;
-		this.status = status;
-		this.dailyRate = dailyRate;
+	public Room() {
 	}
 
 	public void setBeds(int beds) {

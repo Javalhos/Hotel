@@ -15,10 +15,10 @@ public class RoomDAO implements DAO<Room> {
 			"(room, beds, type, extension_phone, daily_rate, status)" +
 			"VALUES (?, ?, ?, ?, ?, ?)";
 
-		Connection connect = DB.openConnection();
-
+			
 		try {
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setInt(1, data.getRoom());
 			pst.setInt(2, data.getBeds());
@@ -44,10 +44,10 @@ public class RoomDAO implements DAO<Room> {
 		sql = "UPDATE rooms SET beds = ?, type = ?, extension_phone = ?"
 				+ "daily_rate = ?, status = ? WHERE room = ?";
 
-		Connection connect = DB.openConnection();
-
+				
 		try {
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setInt(0, data.getRoom());
 			pst.setInt(1, data.getBeds());
@@ -72,10 +72,10 @@ public class RoomDAO implements DAO<Room> {
 	public boolean destroy (Room data) {
 		sql = "DELETE FROM rooms WHERE room = ?";
 
-		Connection connect = DB.openConnection();
-
 		try {
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setInt(1, data.getRoom());
 
@@ -95,10 +95,10 @@ public class RoomDAO implements DAO<Room> {
 	public Room search (Room data) {
 		sql = "SELECT * FROM rooms WHERE room LIKE '%" + data.getRoom() + "%' LIMIT 1";
 
-		Connect connect = DB.openConnection();
-
 		try {
-			Statement statement = connect.createStatement();
+			DB.openConnection();
+
+			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
 			return (Room) rs;
@@ -111,21 +111,30 @@ public class RoomDAO implements DAO<Room> {
 	public Collection<Room> list (String where) {
 		sql = "SELECT * FROM rooms " + where;
 
-		Connection connect = DB.openConnection();
-
 		try {
-			Statement statement = connect.createStatement();
+			DB.openConnection();
+
+			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
 			// Não sei se tá certo
-			Collection<Room> rooms = new ArrayList<>();
+			Collection<Room> rooms = new ArrayList();
 			while (rs.next()) {
-				rooms.add((Room) rs);
+				Room room = new Room();
+
+				room.setRoom(rs.getInt("room"));
+				room.setBeds(rs.getInt("beds"));
+				room.setDailyRate(rs.getFloat("daily_rate"));
+				room.setExtensionPhone(rs.getString("extension_phone"));
+				room.setStatus(rs.getString("status"));
+				room.setType(rs.getString("type"));
+				rooms.add(room);
 			}
 
 			return rooms;
 		} catch (Exception e) {
 			//TODO: handle exception
+			System.out.println(e.toString());
 			return null;
 		}
 	}

@@ -5,6 +5,7 @@ import java.util.*;
 import java.io.IOException;
 import java.lang.*;
 
+import Controllers.RoomController;
 /**
  * Server
  */
@@ -14,6 +15,9 @@ public class Server {
 		Express app = new Express();
 
 		Gson gson = new Gson();
+		app.get("/room", (req, res) -> {
+			res.send(RoomController.index());
+		});
 		app.use(Middleware.statics("./app/dist"));
 		app.listen();
 	}
