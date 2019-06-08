@@ -1,4 +1,0 @@
-cd ./app
-npm run build
-cd ..
-javac -cp ./lib/*;./ Server.java && java -cp ./lib/*;./ Server

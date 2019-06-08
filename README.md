@@ -1,17 +1,11 @@
 # Sistema de Hotelaria - POO
 
 ## Executando o Servidor
-_1º. Troque para a pasta do Front_
-> cd ./app
+_1º. Execute o arquivo `startClient.bat`_
+Após a execução deste arquivo, e do front estar rodando na porta 8080, você pode seguir para o 2º passo.
 
-_2º. Execute o build_
-> npm run build
-
-_3º. Volte para a pasta anterior_
-> cd ..
-
-_4º. Execute o Servidor_
-> javac -cp ./lib/*;./ Server.java && java -cp ./lib/*;./ Server
+_2º. Execute o arquivo `startServer.bat`_
+Esse arquivo irá compilar o servidor e irá executá-lo na porta 80.
 
 ## Links Úteis
 ### DER Atual
