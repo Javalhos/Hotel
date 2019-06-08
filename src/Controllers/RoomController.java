@@ -1,16 +1,37 @@
 package src.Controllers;
 
 import java.util.*;
-import com.google.gson.Gson;
+import express.DynExpress;
+import express.http.RequestMethod;
+import express.http.request.Request;
+import express.http.response.Response;
+
 import src.Data.Room;
 import src.Models.RoomDAO;
 
-public class RoomController {
-	public static String index () {
-		Gson gson = new Gson();
-		RoomDAO dao = new RoomDAO();
-		Collection<Room> rooms = dao.list("");
+public class RoomController extends Controller {
 
-		return gson.toJson(rooms);
+	private final RoomDAO roomDAO = new RoomDAO();
+	private class CreateRoomResponse {
+		@SuppressWarnings("unused")
+		public Boolean success = false;
+	}
+
+	@DynExpress(context = "/room")
+	public void getIndex (Request req, Response res) {
+		Collection<Room> rooms = roomDAO.list("");
+
+		res.send(gson.toJson(rooms));
+	}
+
+	//
+	@DynExpress(context = "/room", method = RequestMethod.POST)
+	public void store(Request req, Response res) {
+		Room room = this.parseBody(req, Room.class);
+
+		CreateRoomResponse result = new CreateRoomResponse();
+
+		result.success = roomDAO.create(room);
+		res.send(gson.toJson(result));
 	}
 }
