@@ -1,11 +1,13 @@
-package Models;
+package src.Models;
 
-import Data.Room;
-import Database.DB;
-
+// Java & 3rd Party
 import java.sql.*;
 import java.util.Collection;
 import java.util.ArrayList;
+
+// Project
+import src.Data.Room;
+import src.Database.DB;
 
 public class RoomDAO implements DAO<Room> {
 	private String sql = "";
@@ -118,7 +120,7 @@ public class RoomDAO implements DAO<Room> {
 			ResultSet rs = statement.executeQuery(sql);
 
 			// Não sei se tá certo
-			Collection<Room> rooms = new ArrayList();
+			Collection<Room> rooms = new ArrayList<Room>();
 			while (rs.next()) {
 				Room room = new Room();
 

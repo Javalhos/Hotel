@@ -1,9 +1,9 @@
-package Controllers;
+package src.Controllers;
 
 import java.util.*;
 import com.google.gson.Gson;
-import Data.Room;
-import Models.RoomDAO;
+import src.Data.Room;
+import src.Models.RoomDAO;
 
 public class RoomController {
 	public static String index () {

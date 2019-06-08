@@ -1,5 +1,6 @@
-package Models;
+package src.Models;
 
+// Java & 3rd Party
 import java.sql.SQLException;
 import java.util.Collection;
 

@@ -1,11 +1,8 @@
 import express.Express;
 import express.middleware.Middleware;
-import com.google.gson.Gson;
-import java.util.*;
 import java.io.IOException;
-import java.lang.*;
 
-import Controllers.RoomController;
+import src.Controllers.RoomController;
 /**
  * Server
  */
@@ -14,11 +11,11 @@ public class Server {
 	public static void main(String[] args) throws IOException {
 		Express app = new Express();
 
-		Gson gson = new Gson();
+		app.use(Middleware.statics("./client/dist"));
 		app.get("/room", (req, res) -> {
 			res.send(RoomController.index());
 		});
-		app.use(Middleware.statics("./app/dist"));
-		app.listen();
+		app.listen(8080);
+		System.out.println("Server running on port 8080...");
 	}
 }
