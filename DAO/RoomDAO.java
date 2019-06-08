@@ -10,14 +10,14 @@ import java.util.ArrayList;
 public class RoomDAO implements DAO<Room> {
 	private String sql = "";
 
-	public boolean create (Room data) throws Exception {
+	public boolean create (Room data) {
 		sql = "INSERT INTO rooms" + 
 			"(room, beds, type, extension_phone, daily_rate, status)" +
 			"VALUES (?, ?, ?, ?, ?, ?)";
 			
 		try {
-			Connection connect = DB.openConnection();
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setInt(1, data.getRoom());
 			pst.setInt(2, data.getBeds());
@@ -34,17 +34,18 @@ public class RoomDAO implements DAO<Room> {
 				return false;
 			}
 		} catch (Exception e) {
-			throw new Exception("Erro ao criar quarto!", e);
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public boolean update (Room data) throws Exception {
+	public boolean update (Room data) {
 		sql = "UPDATE rooms SET beds = ?, type = ?, extension_phone = ?"
 				+ "daily_rate = ?, status = ? WHERE room = ?";
 	
 		try {
-			Connection connect = DB.openConnection();
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setInt(0, data.getRoom());
 			pst.setInt(1, data.getBeds());
@@ -61,16 +62,17 @@ public class RoomDAO implements DAO<Room> {
 				return false;
 			}
  		} catch (Exception e) {
-			throw new Exception("Erro ao atualizar quarto!", e);
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public boolean destroy (Room data) throws Exception {
+	public boolean destroy (Room data) {
 		sql = "DELETE FROM rooms WHERE room = ?";
 
 		try {
-			Connection connect = DB.openConnection();
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setInt(1, data.getRoom());
 
@@ -82,42 +84,61 @@ public class RoomDAO implements DAO<Room> {
 				return false;
 			}
 		} catch (Exception e) {
-			throw new Exception("Erro ao deletar quarto!", e);
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public Room search (Room data) throws Exception {
-		sql = "SELECT * FROM rooms WHERE room LIKE '%" + data.getRoom() + "%' LIMIT 1";
+	public Room search (Room data) {
+		sql = "SELECT * FROM rooms WHERE room = " + data.getRoom() + " LIMIT 1";
+
+		try {
+			DB.openConnection();
+			Statement statement = DB.connection.createStatement();
+			ResultSet rs = statement.executeQuery(sql);
+
+			Room room = new Room();
+			while(rs.next()) {
+				room.setRoom(rs.getInt("room"));
+				room.setBeds(rs.getInt("beds"));
+				room.setDailyRate(rs.getFloat("daily_rate"));
+				room.setExtensionPhone(rs.getString("extension_phone"));
+				room.setStatus(rs.getString("status"));
+				room.setType(rs.getString("type"));
+			}
+
+			return room;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Collection<Room> list (String where) {
+		sql = "SELECT * FROM rooms " + where;
 	
 		try {
-			Connection connect = DB.openConnection();
-			Statement statement = connect.createStatement();
+			DB.openConnection();
+			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			return (Room) rs;
-		} catch (Exception e) {
-			throw new Exception("Erro ao pesquisar quarto!", e);
-		}
-	}
-
-	public Collection<Room> list (String where) throws Exception {
-		sql = "SELECT * FROM rooms " + where;
-
-		
-		try {
-			Connection connect = DB.openConnection();
-			Statement statement = connect.createStatement();
-			ResultSet rs = statement.executeQuery(sql);
-
-			// Não sei se tá certo
-			Collection<Room> rooms = new ArrayList<>();
+			Collection<Room> rooms = new ArrayList();
 			while (rs.next()) {
-				rooms.add((Room) rs);
+				Room room = new Room();
+
+				room.setRoom(rs.getInt("room"));
+				room.setBeds(rs.getInt("beds"));
+				room.setDailyRate(rs.getFloat("daily_rate"));
+				room.setExtensionPhone(rs.getString("extension_phone"));
+				room.setStatus(rs.getString("status"));
+				room.setType(rs.getString("type"));
+				rooms.add(room);
 			}
 
 			return rooms;
 		} catch (Exception e) {
-			throw new Exception("Erro ao listar quartos!", e);
+			e.printStackTrace();
+			return null;
 		}
 	}
 }

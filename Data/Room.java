@@ -8,6 +8,10 @@ public class Room {
 	private String status;
 	private float dailyRate;
 
+	public Room() {
+		
+	}
+
 	public Room(int beds, int room, String type, String extensionPhone, String status, float dailyRate) {
 		this.beds = beds;
 		this.room = room;

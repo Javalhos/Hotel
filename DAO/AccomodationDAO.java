@@ -10,19 +10,18 @@ import java.util.ArrayList;
 public class AccomodationDAO implements DAO<Accomodation> {
 	private String sql = "";
 	
-	public boolean create (Accomodation data) throws Exception {
+	public boolean create (Accomodation data) {
 		sql = "INSERT INTO acoomodations" + 
-			"(rental_id, booking_id, user_cpf, consumed_services, total_value, status)" +
-			"VALUES (?, ?, ?, ?, ?, ?)";
+			"(rental_id, booking_id, user_cpf, total_value, status)" +
+			"VALUES (?, ?, ?, ?, ?)";
 			
 		try {
-			Connection connect = DB.openConnection();
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setInt(1, data.getRentalId());
 			pst.setInt(2, data.getBookingId());
 			pst.setString(3, data.getUserCpf());
-			pst.setInt(4, data.getConsumedServices());
 			pst.setFloat(5, data.getTotal());
 			pst.setString(6, data.getStatus());
 			
@@ -34,16 +33,17 @@ public class AccomodationDAO implements DAO<Accomodation> {
 				return false;
 			}
 		} catch (Exception e) {
-			throw new Exception("Erro ao criar acomodação!", e);
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public boolean update (Accomodation data) throws Exception {
+	public boolean update (Accomodation data) {
 		sql = "UPDATE accomodations SET total_value = ?, status = ? WHERE id = ?";
 
 		try {
-			Connection connect = DB.openConnection();
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setInt(0, data.getId());
 			pst.setFloat(1, data.getTotal());
@@ -57,16 +57,17 @@ public class AccomodationDAO implements DAO<Accomodation> {
 				return false;
 			}
  		} catch (Exception e) {
-			throw new Exception("Erro ao atualizar acomodação!", e);
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public boolean destroy (Accomodation data) throws Exception {
+	public boolean destroy (Accomodation data) {
 		sql = "DELETE FROM accomodations WHERE id = ?";
 		
 		try {
-			Connection connect = DB.openConnection();
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setInt(1, data.getId());
 
@@ -78,41 +79,61 @@ public class AccomodationDAO implements DAO<Accomodation> {
 				return false;
 			}
 		} catch (Exception e) {
-			throw new Exception("Erro ao deletar acomodação!", e);
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public Accomodation search (Accomodation data) throws Exception {
-		sql = "SELECT * FROM accomodations WHERE id LIKE '%" + data.getId() + "%' LIMIT 1";
+	public Accomodation search (Accomodation data) {
+		sql = "SELECT * FROM accomodations WHERE id = " + data.getId() + " LIMIT 1";
 		
 		try {
-			Connection connect = DB.openConnection();
-			Statement statement = connect.createStatement();
+			DB.openConnection();
+			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
+			
+			Accomodation accomodation = new Accomodation();
+			while(rs.next()) {
+				accomodation.setId(rs.getInt("id"));
+				accomodation.setRentalId(rs.getInt("rental_id"));
+				accomodation.setBookingId(rs.getInt("booking_id"));
+				accomodation.setUserCpf(rs.getString("user_cpf"));
+				accomodation.setTotal(rs.getFloat("total_value"));
+				accomodation.setStatus(rs.getString("status"));
+			}
 
-			return (Accomodation) rs;
+			return accomodation;
 		} catch (Exception e) {
-			throw new Exception("Erro ao pesquisar acomodação!", e);
+			e.printStackTrace();
+			return null;
 		}
 	}
 
-	public Collection<Accomodation> list (String where) throws Exception {
+	public Collection<Accomodation> list (String where) {
 		sql = "SELECT * FROM accomodations " + where;
 		
 		try {
-			Connection connect = DB.openConnection();
-			Statement statement = connect.createStatement();
+			DB.openConnection();
+			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			// Não sei se tá certo
-			Collection<Accomodation> accomodations = new ArrayList<>();
+			Collection<Accomodation> accomodations = new ArrayList();
 			while (rs.next()) {
-				accomodations.add((Accomodation) rs);
+				Accomodation accomodation = new Accomodation();
+
+				accomodation.setId(rs.getInt("id"));
+				accomodation.setRentalId(rs.getInt("rental_id"));
+				accomodation.setBookingId(rs.getInt("booking_id"));
+				accomodation.setUserCpf(rs.getString("user_cpf"));
+				accomodation.setTotal(rs.getFloat("total_value"));
+				accomodation.setStatus(rs.getString("status"));
+				accomodations.add(accomodation);
 			}
 
 			return accomodations;
 		} catch (Exception e) {
-			throw new Exception("Erro ao listar acomodações!", e);
+			e.printStackTrace();
+			return null;
 		}
 	}
 }

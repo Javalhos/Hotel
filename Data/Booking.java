@@ -10,8 +10,11 @@ public class Booking {
 	private String status;
 	private float value;
 
-	public Booking(int id, String userCpf, int room, String entryDate, String departureDate, float bookTax, String status, float value) {
-		this.id = id;
+	public Booking() {
+		
+	}
+
+	public Booking(String userCpf, int room, String entryDate, String departureDate, float bookTax, String status, float value) {
 		this.userCpf = userCpf;
 		this.room = room;
 		this.entryDate = entryDate;

@@ -13,14 +13,13 @@ public class UserDAO implements DAO<User> {
 	private String sql = "";
 
 	// Método de inserir
-	public boolean create (User data) throws Exception {
+	public boolean create (User data) {
 		sql = "INSERT INTO users" + "(cpf, name, email, password, contact_number, address, birthday, level)"
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
 				
 		try {
-			Connection connect = DB.openConnection();
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setString(1, data.getCpf());
 			pst.setString(2, data.getName());
@@ -39,17 +38,18 @@ public class UserDAO implements DAO<User> {
 				return false;
 			}
 		} catch (Exception e) {
-			throw new Exception("Erro ao criar usuário!", e);
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public boolean update (User data) throws Exception {
+	public boolean update (User data) {
 		sql = "UPDATE users SET name = ?, email = ?, password = ?"
 				+ "contact_number = ?, address = ?, birthday = ?, level = ? WHERE cpf = ?";
 				
 		try {
-			Connection connect = DB.openConnection();
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setString(1, data.getName());
 			pst.setString(2, data.getEmail());
@@ -67,16 +67,17 @@ public class UserDAO implements DAO<User> {
 				return false;
 			}
 		} catch (Exception e) {
-			throw new Exception("Erro ao atualizar usuário!", e);
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public boolean destroy (User data) throws Exception {
+	public boolean destroy (User data) {
 		sql = "DELETE FROM users WHERE cpf = ?";
 		
 		try {
-			Connection connect = DB.openConnection();
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setString(1, data.getCpf());
 
@@ -88,41 +89,64 @@ public class UserDAO implements DAO<User> {
 				return false;
 			}
 		} catch (Exception e) {
-			throw new Exception("Erro ao deletar usuário!", e);
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public User search (User data) throws Exception {
-		sql = "SELECT * FROM users WHERE cpf LIKE '%" + data + "%' OR" +
-		"email LIKE '%" + data + "%' ORDER BY id_room";
+	public User search (User data) {
+		sql = "SELECT * FROM users WHERE cpf = " + data.getCpf() + " OR" +
+		"email = " + data.getEmail();
 		
 		try {
-			Connection connect = DB.openConnection();
-			Statement statement = connect.createStatement();
+			DB.openConnection();
+			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			return (User) rs;
+			User user = new User();
+			while(rs.next()) {
+				user.setCpf(rs.getString("cpf"));
+				user.setName(rs.getString("name"));
+				user.setEmail(rs.getString("email"));
+				user.setContactNumber(rs.getString("contact_number"));
+				user.setAddress(rs.getString("address"));
+				user.setBirthday(rs.getString("birthday"));
+				user.setLevel(rs.getString("level"));
+			}
+
+			return user;
 		} catch (Exception e) {
-			throw new Exception("Erro ao pesquisar usuário!", e);
+			e.printStackTrace();
+			return null;
 		}
 	}
 
-	public Collection<User> list (String where) throws Exception {
+	public Collection<User> list (String where) {
 		sql = "SELECT * FROM users " + where;
 		
 		try {
-			Connection connect = DB.openConnection();
-			Statement statement = connect.createStatement();
+			DB.openConnection();
+			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			Collection<User> users = new ArrayList<>();
+			Collection<User> users = new ArrayList();
 			while (rs.next()) {
-				users.add((User) rs);
+				User user = new User();
+
+				user.setCpf(rs.getString("cpf"));
+				user.setName(rs.getString("name"));
+				user.setEmail(rs.getString("email"));
+				user.setContactNumber(rs.getString("contact_number"));
+				user.setAddress(rs.getString("address"));
+				user.setBirthday(rs.getString("birthday"));
+				user.setLevel(rs.getString("level"));
+				users.add(user);
 			}
 
 			return users;
 		} catch (Exception e) {
-			throw new Exception("Erro ao listar usuários!", e);
+			e.printStackTrace();
+			return null;
 		}
 	}
 }

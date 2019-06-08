@@ -10,15 +10,15 @@ import java.util.ArrayList;
 public class RentalDAO implements DAO<Rental> {
 	private String sql = "";
 
-	public boolean create (Rental data) throws Exception {
+	public boolean create (Rental data) {
 		sql = "INSERT INTO rentals" + 
 			"(user_cpf, room, entry_date, departure_date, status, value)" +
 			"VALUES (?, ?, ?, ?, ?, ?)";
 
 			
 		try {
-			Connection connect = DB.openConnection();
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setString(1, data.getCpf());
 			pst.setInt(2, data.getRoom());
@@ -35,18 +35,19 @@ public class RentalDAO implements DAO<Rental> {
 				return false;
 			}
 		} catch (Exception e) {
-			throw new Exception("Erro ao criar aluguel!", e);
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public boolean update (Rental data) throws Exception {
+	public boolean update (Rental data) {
 		sql = "UPDATE rentals SET user_cpf = ?, room = ?, entry_date = ?, departure_data = ?, "
 				+ "status = ?, value = ? WHERE id = ?";
 
 				
 		try {
-			Connection connect = DB.openConnection();
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setInt(0, data.getId());
 			pst.setString(1, data.getCpf());
@@ -64,18 +65,19 @@ public class RentalDAO implements DAO<Rental> {
 				return false;
 			}
  		} catch (Exception e) {
-			throw new Exception("Erro ao atualizar aluguel!", e);
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public boolean destroy (Rental data) throws Exception {
+	public boolean destroy (Rental data) {
 		// Ainda falta as relações
 		sql = "DELETE FROM rentals WHERE id = ?";
 
 		
 		try {
-			Connection connect = DB.openConnection();
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setInt(1, data.getId());
 
@@ -87,41 +89,64 @@ public class RentalDAO implements DAO<Rental> {
 				return false;
 			}
 		} catch (Exception e) {
-			throw new Exception("Erro ao deletar aluguel!", e);
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public Rental search (Rental data) throws Exception {
+	public Rental search (Rental data) {
 		sql = "SELECT * FROM rentals WHERE id LIKE '%" + data.getId() + "%' LIMIT 1";
 
 		try {
-			Connection connect = DB.openConnection();
-			Statement statement = connect.createStatement();
+			DB.openConnection();
+			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			return (Rental) rs;
+			Rental rental = new Rental();
+
+			while(rs.next()) {
+				rental.setId(rs.getInt("id"));
+				rental.setCpf(rs.getString("user_cpf"));
+				rental.setRoom(rs.getInt("room"));
+				rental.setEntryDate(rs.getString("entry_date"));
+				rental.setDepartureDate(rs.getString("departure_date"));
+				rental.setStatus(rs.getString("status"));
+				rental.setValue(rs.getFloat("value"));
+			}
+			
+			return rental;
 		} catch (Exception e) {
-			throw new Exception("Erro ao pesquisar aluguel!", e);
+			e.printStackTrace();
+			return null;
 		}
 	}
 
-	public Collection<Rental> list (String where) throws Exception {
+	public Collection<Rental> list (String where) {
 		sql = "SELECT * FROM rentals " + where;
 
 		try {
-			Connection connect = DB.openConnection();
-			Statement statement = connect.createStatement();
+			DB.openConnection();
+			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			// Não sei se tá certo
-			Collection<Rental> rentals = new ArrayList<>();
+			Collection<Rental> rentals = new ArrayList();
 			while (rs.next()) {
-				rentals.add((Rental) rs);
+				Rental rental = new Rental();
+
+				rental.setId(rs.getInt("id"));
+				rental.setCpf(rs.getString("user_cpf"));
+				rental.setRoom(rs.getInt("room"));
+				rental.setEntryDate(rs.getString("entry_date"));
+				rental.setDepartureDate(rs.getString("departure_date"));
+				rental.setStatus(rs.getString("status"));
+				rental.setValue(rs.getFloat("value"));
+				rentals.add(rental);
 			}
 
 			return rentals;
 		} catch (Exception e) {
-			throw new Exception("Erro ao listar alugueis!", e);
+			e.printStackTrace();
+			return null;
 		}
 	}
 }

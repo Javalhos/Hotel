@@ -9,8 +9,11 @@ public class ConsumedServices {
 	private String name;
 	private float value;
 
-	public ConsumedServices(int id, int accId, int serviceId, String name, float value) {
-		this.id = id;
+	public ConsumedServices() {
+
+	}
+
+	public ConsumedServices(int accId, int serviceId, String name, float value) {
 		this.accomodationId = accId;
 		this.serviceId = serviceId;
 		this.name = name;

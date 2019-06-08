@@ -10,6 +10,10 @@ public class User {
 	private String birthday;
 	private String level;
 
+	public User() {
+		
+	}
+
 	public User(String cpf, String name, String email, String password, String contactNumber, String address, String birthday, String level) {
 		this.cpf = cpf;
 		this.name = name;
@@ -69,7 +73,7 @@ public class User {
 		return address;
 	}
 
-	public void setDate(String birthday) {
+	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
 

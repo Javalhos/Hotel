@@ -6,8 +6,11 @@ public class Services {
 	private String description;
 	private float value;
 
-	public Services(int id, String name, String description, float value) {
-		this.id = id;
+	public Services() {
+
+	}
+
+	public Services(String name, String description, float value) {
 		this.name = name;
 		this.description = description;
 		this.value = value;

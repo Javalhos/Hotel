@@ -10,14 +10,14 @@ import java.util.ArrayList;
 public class ServicesDAO implements DAO<Services> {
 	private String sql = "";
 
-	public boolean create (Services data) throws Exception {
+	public boolean create (Services data) {
 		sql = "INSERT INTO services" + 
 			"(name, description, value)" +
 			"VALUES (?, ?, ?)";
 			
 		try {
-			Connection connect = DB.openConnection();
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setString(1, data.getName());
 			pst.setString(2, data.getDescription());
@@ -31,17 +31,18 @@ public class ServicesDAO implements DAO<Services> {
 				return false;
 			}
 		} catch (Exception e) {
-			throw new Exception("Erro ao criar serviço!", e);
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public boolean update (Services data) throws Exception {
+	public boolean update (Services data) {
 		sql = "UPDATE services SET name = ?, description = ?, "
 				+ "value = ?, status = ? WHERE id = ?";
 				
 		try {
-			Connection connect = DB.openConnection();
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setInt(0, data.getId());
 			pst.setString(1, data.getName());
@@ -56,16 +57,17 @@ public class ServicesDAO implements DAO<Services> {
 				return false;
 			}
  		} catch (Exception e) {
-			throw new Exception("Erro ao atualizar serviço!", e);
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public boolean destroy (Services data) throws Exception {
+	public boolean destroy (Services data) {
 		sql = "DELETE FROM services WHERE id = ?";
 		
 		try {
-			Connection connect = DB.openConnection();
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setInt(1, data.getId());
 
@@ -77,42 +79,59 @@ public class ServicesDAO implements DAO<Services> {
 				return false;
 			}
 		} catch (Exception e) {
-			throw new Exception("Erro ao deletar serviço!", e);
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public Services search (Services data) throws Exception {
+	public Services search (Services data) {
 		sql = "SELECT * FROM services WHERE id LIKE '%" + data.getId() 
 		+ "%' LIMIT 1";
 
 		try {
-			Connection connect = DB.openConnection();
-			Statement statement = connect.createStatement();
+			DB.openConnection();
+			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			return (Services) rs;
+			Services service = new Services();
+
+			while(rs.next()) {
+				service.setId(rs.getInt("id"));
+				service.setName(rs.getString("name"));
+				service.setDescription(rs.getString("description"));
+				service.setValue(rs.getFloat("value"));
+			}
+
+			return service;
 		} catch (Exception e) {
-			throw new Exception("Erro ao pesquisar serviço!", e);
+			e.printStackTrace();
+			return null;
 		}
 	}
 
-	public Collection<Services> list (String where) throws Exception {
+	public Collection<Services> list (String where) {
 		sql = "SELECT * FROM services " + where;
 
 		try {
-			Connection connect = DB.openConnection();
-			Statement statement = connect.createStatement();
+			DB.openConnection();
+			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			// Não sei se tá certo
-			Collection<Services> services = new ArrayList<>();
+			Collection<Services> services = new ArrayList();
 			while (rs.next()) {
-				services.add((Services) rs);
+				Services service = new Services();
+
+				service.setId(rs.getInt("id"));
+				service.setName(rs.getString("name"));
+				service.setDescription(rs.getString("description"));
+				service.setValue(rs.getFloat("value"));
+				services.add(service);
 			}
 
 			return services;
 		} catch (Exception e) {
-			throw new Exception("Erro ao listar serviços!", e);
+			e.printStackTrace();
+			return null;
 		}
 	}
 }

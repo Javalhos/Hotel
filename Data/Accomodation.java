@@ -5,16 +5,17 @@ public class Accomodation {
 	private int rentalId; // Id do Aluguel correspondente, se uma reserva existir, este será 0.
 	private int bookingId; // Id da Reserva correspondente, se uma reserva existir, este será 0.
 	private String userCpf;
-	private int consumedServices;
 	private float totalValue;
 	private String status;
 
-	public Accomodation(int id, int rental, int booking, String cpf, int consumedServices, float total, String status) {
-		this.id = id;
+	public Accomodation() {
+
+	}
+
+	public Accomodation(int rental, int booking, String cpf, float total, String status) {
 		this.rentalId = rental;
 		this.bookingId = booking;
 		this.userCpf = cpf;
-		this.consumedServices = consumedServices;
 		this.totalValue = total;
 		this.status = status;
 	}
@@ -49,14 +50,6 @@ public class Accomodation {
 
 	public String getUserCpf() {
 		return userCpf;
-	}
-
-	public void setConsumedServices(int id) {
-		this.consumedServices = id;
-	}
-
-	public int getConsumedServices() {
-		return consumedServices;
 	}
 
 	public void setTotal(float value) {

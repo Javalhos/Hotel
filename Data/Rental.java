@@ -9,8 +9,11 @@ public class Rental {
 	private String status;
 	private float value;
 
-	public Rental(int id, String userCpf, int room, String entryDate, String departureDate, String status, float value) {
-		this.id = id;
+	public Rental() {
+
+	}
+
+	public Rental(String userCpf, int room, String entryDate, String departureDate, String status, float value) {
 		this.userCpf = userCpf;
 		this.room = room;
 		this.entryDate = entryDate;
@@ -19,7 +22,7 @@ public class Rental {
 		this.value = value;
 	}
 
-	public void setInd(int id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

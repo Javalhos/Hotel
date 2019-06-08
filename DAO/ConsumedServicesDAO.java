@@ -10,14 +10,14 @@ import java.util.ArrayList;
 public class ConsumedServicesDAO implements DAO<ConsumedServices> {
 	private String sql = "";
 
-	public boolean create (ConsumedServices data) throws Exception {
+	public boolean create (ConsumedServices data) {
 		sql = "INSERT INTO consumed_services" + 
 			"(accomodation_id, service_id, name, value)" +
 			"VALUES (?, ?, ?, ?)";
 			
 		try {
-			Connection connect = DB.openConnection();
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setInt(1, data.getAccomodation());
 			pst.setInt(2, data.getServiceId());
@@ -32,17 +32,18 @@ public class ConsumedServicesDAO implements DAO<ConsumedServices> {
 				return false;
 			}
 		} catch (Exception e) {
-			throw new Exception("Erro ao criar serviço consumido!", e);
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public boolean update (ConsumedServices data) throws Exception {
+	public boolean update (ConsumedServices data) {
 		sql = "UPDATE consumed_services SET accomodation_id = ?, service_id = ?, "
 				+ "name  = ?, value = ? WHERE id = ?";
 				
 		try {
-			Connection connect = DB.openConnection();
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setInt(0, data.getId());
 			pst.setInt(1, data.getAccomodation());
@@ -58,16 +59,17 @@ public class ConsumedServicesDAO implements DAO<ConsumedServices> {
 				return false;
 			}
  		} catch (Exception e) {
-			throw new Exception("Erro ao atualizar serviço consumido!", e);
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public boolean destroy (ConsumedServices data) throws Exception {
+	public boolean destroy (ConsumedServices data) {
 		sql = "DELETE FROM consumed_services WHERE id = ?";
 		
 		try {
-			Connection connect = DB.openConnection();
-			PreparedStatement pst = connect.prepareStatement(sql);
+			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
 			pst.setInt(1, data.getId());
 
@@ -79,42 +81,61 @@ public class ConsumedServicesDAO implements DAO<ConsumedServices> {
 				return false;
 			}
 		} catch (Exception e) {
-			throw new Exception("Erro ao deletar serviço consumido!", e);
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public ConsumedServices search (ConsumedServices data) throws Exception {
-		sql = "SELECT * FROM consumed_services WHERE id LIKE '%" + data.getId() + "%' OR"
-		+ "accomodation_id LIKE '%" + data.getAccomodation() + "%' LIMIT 1";
+	public ConsumedServices search (ConsumedServices data) {
+		sql = "SELECT * FROM consumed_services WHERE id = " + data.getId() + " OR"
+		+ "accomodation_id = " + data.getAccomodation() + " LIMIT 1";
 		
 		try {
-			Connection connect = DB.openConnection();
-			Statement statement = connect.createStatement();
+			DB.openConnection();
+			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			return (ConsumedServices) rs;
+			ConsumedServices consumedService = new ConsumedServices();
+
+			while(rs.next()) {
+				consumedService.setId(rs.getInt("id"));
+				consumedService.setAccomodation(rs.getInt("accomodation_id"));
+				consumedService.setServiceId(rs.getInt("service_id"));
+				consumedService.setServiceName(rs.getString("name"));
+				consumedService.setServiceValue(rs.getFloat("value"));
+			}
+
+			return consumedService;
 		} catch (Exception e) {
-			throw new Exception("Erro ao pesquisar serviço consumido!", e);
+			e.printStackTrace();
+			return null;
 		}
 	}
 
-	public Collection<ConsumedServices> list (String where) throws Exception {
+	public Collection<ConsumedServices> list (String where) {
 		sql = "SELECT * FROM consumed_services " + where;
 		
 		try {
-			Connection connect = DB.openConnection();
-			Statement statement = connect.createStatement();
+			DB.openConnection();
+			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			// Não sei se tá certo
-			Collection<ConsumedServices> consumedServices = new ArrayList<>();
+			Collection<ConsumedServices> consumedServices = new ArrayList();
 			while (rs.next()) {
-				consumedServices.add((ConsumedServices) rs);
+				ConsumedServices consumedService = new ConsumedServices();
+
+				consumedService.setId(rs.getInt("id"));
+				consumedService.setAccomodation(rs.getInt("accomodation_id"));
+				consumedService.setServiceId(rs.getInt("service_id"));
+				consumedService.setServiceName(rs.getString("name"));
+				consumedService.setServiceValue(rs.getFloat("value"));
+				consumedServices.add(consumedService);
 			}
 
 			return consumedServices;
 		} catch (Exception e) {
-			throw new Exception("Erro ao listar serviços consumidos!", e);
+			e.printStackTrace();
+			return null;
 		}
 	}
 }
