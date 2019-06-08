@@ -18,7 +18,7 @@ public class RoomController extends Controller {
 	}
 
 	@DynExpress(context = "/room")
-	public void getIndex (Request req, Response res) {
+	public void index (Request req, Response res) {
 		Collection<Room> rooms = roomDAO.list("");
 
 		res.send(gson.toJson(rooms));
@@ -26,7 +26,7 @@ public class RoomController extends Controller {
 
 	//
 	@DynExpress(context = "/room", method = RequestMethod.POST)
-	public void store(Request req, Response res) {
+	public void store (Request req, Response res) {
 		Room room = this.parseBody(req, Room.class);
 
 		CreateRoomResponse result = new CreateRoomResponse();
