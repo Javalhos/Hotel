@@ -11,7 +11,7 @@ _3º. Volte para a pasta anterior_
 > cd ..
 
 _4º. Execute o Servidor_
-> javac -cp ./lib/*;./ Server.java && java -cp ./lib/*;./ Server
+> javac -cp ./lib/*;./ Server.java ./DAO/*.java ./Data/*.java && java -cp ./lib/*;./ Server
 
 ## Links Úteis
 ### DER Atual
