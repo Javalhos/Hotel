@@ -26,13 +26,11 @@ public class RoomController extends Controller {
 
 	@DynExpress(context = "/room/:id")
 	public void show (Request req, Response res) {
-		RoomDAO dao = new RoomDAO();
-
 		Room room = new Room();
 		room.setRoom(Integer.parseInt(req.getParam("id")));
 
 		Object rm = new Object();
-		rm = dao.search(room);
+		rm = roomDAO.search(room);
 		res.send(gson.toJson(rm));
 	}
 
