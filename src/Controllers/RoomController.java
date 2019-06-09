@@ -53,4 +53,15 @@ public class RoomController extends Controller {
 		result.success = roomDAO.update(room);
 		res.send(gson.toJson(result));
 	}
+
+	@DynExpress(context = "/room/:id", method = RequestMethod.DELETE)
+	public void destroy (Request req, Response res) {
+		Room room = new Room();
+		room.setRoom(Integer.parseInt(req.getParam("id")));
+
+		CreateRoomResponse result = new CreateRoomResponse();
+
+		result.success = roomDAO.destroy(room);
+		res.send(gson.toJson(result));
+	}
 }
