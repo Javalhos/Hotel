@@ -1,16 +1,16 @@
 package src.Models;
 
-import src.Data.Services;
+import src.Data.Service;
 import src.Database.DB;
 
 import java.sql.*;
 import java.util.Collection;
 import java.util.ArrayList;
 
-public class ServicesDAO implements DAO<Services> {
+public class ServiceDAO implements DAO<Service> {
 	private String sql = "";
 
-	public boolean create (Services data) {
+	public boolean create (Service data) {
 		sql = "INSERT INTO services" + 
 			"(name, description, value)" +
 			"VALUES (?, ?, ?)";
@@ -36,15 +36,14 @@ public class ServicesDAO implements DAO<Services> {
 		}
 	}
 
-	public boolean update (Services data) {
+	public boolean update (Service data) {
 		sql = "UPDATE services SET name = ?, description = ?, "
-				+ "value = ?, status = ? WHERE id = ?";
+				+ "value = ? WHERE id = '" + data.getId() + "'";
 				
 		try {
 			DB.openConnection();
 			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
-			pst.setInt(0, data.getId());
 			pst.setString(1, data.getName());
 			pst.setString(2, data.getDescription());
 			pst.setFloat(3, data.getValue());
@@ -62,7 +61,7 @@ public class ServicesDAO implements DAO<Services> {
 		}
 	}
 
-	public boolean destroy (Services data) {
+	public boolean destroy (Service data) {
 		sql = "DELETE FROM services WHERE id = ?";
 		
 		try {
@@ -84,7 +83,7 @@ public class ServicesDAO implements DAO<Services> {
 		}
 	}
 
-	public Services search (Services data) {
+	public Service search (Service data) {
 		sql = "SELECT * FROM services WHERE id = '" + data.getId() 
 		+ "' LIMIT 1";
 
@@ -93,7 +92,7 @@ public class ServicesDAO implements DAO<Services> {
 			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			Services service = new Services();
+			Service service = new Service();
 
 			while(rs.next()) {
 				service.setId(rs.getInt("id"));
@@ -109,7 +108,7 @@ public class ServicesDAO implements DAO<Services> {
 		}
 	}
 
-	public Collection<Services> list (String where) {
+	public Collection<Service> list (String where) {
 		sql = "SELECT * FROM services " + where;
 
 		try {
@@ -117,9 +116,9 @@ public class ServicesDAO implements DAO<Services> {
 			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			Collection<Services> services = new ArrayList<Services>();
+			Collection<Service> services = new ArrayList<Service>();
 			while (rs.next()) {
-				Services service = new Services();
+				Service service = new Service();
 
 				service.setId(rs.getInt("id"));
 				service.setName(rs.getString("name"));
