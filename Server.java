@@ -13,7 +13,9 @@ public class Server {
 	public static void main(String[] args) throws IOException {
 		Express app = new Express();
 
-		app.use(Middleware.statics("./client/dist"));
+		// Set Middlewares
+		app.use(Middleware.statics("./client/dist")); // Static Files Middleware
+		app.use((req, res) -> res.setContentType("application/json"));
 		
 		// Room Controller
 		app.bind(new RoomController());
