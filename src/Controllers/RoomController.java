@@ -17,14 +17,25 @@ public class RoomController extends Controller {
 		public Boolean success = false;
 	}
 
-	@DynExpress(context = "/room")
+	@DynExpress(context = "/rooms")
 	public void index (Request req, Response res) {
 		Collection<Room> rooms = roomDAO.list("");
 
 		res.send(gson.toJson(rooms));
 	}
 
-	//
+	@DynExpress(context = "/room/:id")
+	public void show (Request req, Response res) {
+		RoomDAO dao = new RoomDAO();
+
+		Room room = new Room();
+		room.setRoom(Integer.parseInt(req.getParam("id")));
+
+		Object rm = new Object();
+		rm = dao.search(room);
+		res.send(gson.toJson(rm));
+	}
+
 	@DynExpress(context = "/room", method = RequestMethod.POST)
 	public void store (Request req, Response res) {
 		Room room = this.parseBody(req, Room.class);
@@ -32,6 +43,16 @@ public class RoomController extends Controller {
 		CreateRoomResponse result = new CreateRoomResponse();
 
 		result.success = roomDAO.create(room);
+		res.send(gson.toJson(result));
+	}
+
+	@DynExpress(context = "/room", method = RequestMethod.PATCH)
+	public void edit (Request req, Response res) {
+		Room room = this.parseBody(req, Room.class);
+
+		CreateRoomResponse result = new CreateRoomResponse();
+
+		result.success = roomDAO.update(room);
 		res.send(gson.toJson(result));
 	}
 }

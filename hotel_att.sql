@@ -70,6 +70,7 @@ CREATE TABLE `payment` (
 	PRIMARY KEY(id)
 );
 
+-- Insere os usuários na tabela users.
 INSERT INTO `users` (`cpf`, `name`, `email`, `password`, `contact_number`, `address`, `birthday`, `level`) VALUES 
 ('000.000.000-00', 'Tatiana Vitorello', 'vitorellotts@gmail.com', 'teste123', '00000-0000', 'Rua Cedral', '1998-10-23', 'ADMIN'),
 ('111.111.111-11', 'Fulano da Silva', 'fulanosilva@gmail.com', 'teste1', '11111-1111', 'Rua Central', '1998-10-23', 'EMPLOYEE'),
@@ -105,12 +106,88 @@ INSERT INTO `consumed_services` (`accomodation_id`, `service_id`, `value`) VALUE
 ('3', '5', '20.00'),
 ('1', '4', '60.00');
 
+-- Foi separado um campo para realizar a diferenciação entre Alugel e Reserva.
+-- Insere os respectivos alugueis na tabela de Hospedagem.
+INSERT INTO `accomodations` (`room`, `cpf`, `type`, `entry_date`, `departure_date`, `status`, `value`) VALUES
+('5', '333.333.333-33', 'ALUGUEL', '2019-06-07', '2019-06-09', 'EM ANDAMENTO', '750.00'),
+('7', '444.444.444-44', 'ALUGUEL', '2019-06-07', '2019-06-09', 'EM ANDAMENTO', '750.00'),
+('8', '222.222.222-22', 'ALUGUEL', '2019-05-17', '2019-06-23', 'PENDENTE', '1200.00'); 
+
+-- Insere as respectivas reservas na tabela de hospedagens.
 INSERT INTO `accomodations` (`room`, `cpf`, `type`, `entry_date`, `departure_date`, `status`, `value`) VALUES
 ('1', '222.222.222-22', 'RESERVA', '2019-06-03', '2019-06-07', 'PENDENTE', '750.00'),
-('5', '333.333.333-33', 'ALUGUEL', '2019-06-07', '2019-06-09', 'EM ANDAMENTO', '750.00'),
-('7', '444.444.444-44', 'ALUGUEL', '2019-06-07', '2019-06-09', 'EM ANDAMENTO', '750.00'); 
+('2', '333.333.333-33', 'RESERVA', '2019-07-01', '2019-07-05', 'PENDENTE', '600.00'),
+('4', '444.444.444-44', 'RESERVA', '2019-06-20', '2019-06-23', 'PENDENTE', '750.00');
 
+-- Insere os dados na tabela de pagamentos.
 INSERT INTO `payment` (`accomodation_id`, `tax`, `services_value`, `total_value`, `payment_type`, `status`) VALUES
 ('1', '50.00', '185.00', '985.00', 'CARTÃO', 'PENDENTE'),
 ('2', '00.00', '60.00', '810.00', 'DINHEIRO', 'PAGO'),
 ('1', '00.00', '60.00', '810.00', 'CARTÃO', 'PENDENTE');
+
+-- CRIAÇÃO DAS VIEWS
+-- View que retorna apenas os usuários, excluindo os funcionários e administradores. 
+CREATE VIEW `customers` AS
+SELECT `cpf` AS `Cpf`,
+	`name` AS `Nome`,
+	`email` AS `E-mail`,
+	`contact_number` AS `Número de Contato`,
+	`address` AS `Endereço`,
+	`birthday` AS `Data de Nascimento`
+FROM `users`
+WHERE `level` LIKE 'USER';
+
+-- Seleciona a View "customers".
+SELECT * FROM `customers`;
+
+-- View que retorna apenas as hospedagens que foram registradas como aluguel.
+CREATE VIEW `alugueis` AS
+SELECT `id` AS `Número do aluguel`,
+	`room` AS `Quarto`,
+	`cpf` AS `Cpf do Hóspede`,
+	`type` AS `Tipo de Hospedagem`,
+	`entry_date` AS `Data de Entrada`,
+	`departure_date` AS `Data de Saída`,
+	`status` AS `Estado da Hospedagem`,
+	`value` AS `Valor das Diárias`
+FROM `accomodations`
+WHERE `type` = 'ALUGUEL';
+
+-- Seleciona a View "alugueis".
+SELECT * FROM `alugueis`;
+
+-- STORED PROCEDURE
+-- Stored Procedure que retorna os registros de acordo com o tipo de hospedagem.
+CREATE PROCEDURE Busca(in tipo VARCHAR(20))
+SELECT `room` AS `Quarto`,
+	`cpf` AS `CPF do Hóspede`,
+	`type` AS `Tipo de Hospedagem`,
+	`entry_date` AS `Data de Entrada`,
+	`departure_date` AS `Data de Saída`,
+	`status` AS `Estado da Hospedagem`,
+	`value` AS `Valor da Hospedagem`
+FROM `accomodations`
+WHERE `type` = tipo;
+
+-- Executa a Procedure
+CALL Busca('RESERVA');
+
+-- CRIAÇÃO DA SUBCONSULTA
+-- Subconsulta que retorna apenas as hospedagens 
+-- com valores maiores do que a média.
+SELECT * FROM `accomodations`
+WHERE `value` >
+(SELECT AVG(`value`) FROM `accomodations`);
+
+-- CRIAÇÃO DO TRIGGER
+-- Trigger que atualiza o valor dos serviços consumidos
+-- na tabela "payment".
+DELIMITER ##
+CREATE TRIGGER AttValorServicos AFTER INSERT
+ON `consumed_services` 
+FOR EACH ROW
+BEGIN
+DECLARE newVal DECIMAL;
+SET newVal = (SELECT `value` FROM `consumed_services` WHERE `value` = NEW.`value` LIMIT 1);
+UPDATE `payment` SET `services_value` = `services_value` + newVal WHERE `accomodation_id` = NEW.`accomodation_id`;
+END##;
