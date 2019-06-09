@@ -19,6 +19,9 @@ public class Server {
 		
 		// Room Controller
 		app.bind(new RoomController());
+		
+		// Payment Controller
+		app.bind(new PaymentController());
 
 		app.listen(PORT);
 		System.out.println("Server running on port " + PORT + "...");
