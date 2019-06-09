@@ -53,4 +53,15 @@ public class ServiceController extends Controller {
 		result.success = serviceDAO.update(service);
 		res.send(gson.toJson(result));
 	}
+
+	@DynExpress(context = "/service/:id", method = RequestMethod.DELETE)
+	public void destroy (Request req, Response res) {
+		Service service = new Service();
+		service.setId(Integer.parseInt(req.getParam("id")));
+
+		CreateServiceResponse result = new CreateServiceResponse();
+
+		result.success = serviceDAO.destroy(service);
+		res.send(gson.toJson(result));
+	}
 }
