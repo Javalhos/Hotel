@@ -20,6 +20,9 @@ public class Server {
 		// Room Controller
 		app.bind(new RoomController());
 
+		// Accomodations Controller
+		app.bind(new AccomodationController());
+
 		app.listen(PORT);
 		System.out.println("Server running on port " + PORT + "...");
 	}
