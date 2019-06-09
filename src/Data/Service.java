@@ -1,12 +1,12 @@
 package src.Data;
 
-public class Services {
+public class Service {
 	private int id;
 	private String name;
 	private String description;
 	private float value;
 
-	public Services() {
+	public Service() {
 	}
 
 	public void setId(int id) {
