@@ -26,6 +26,9 @@ public class Server {
 		// Consumed Controller
 		app.bind(new ConsumedController());
 
+		// Accomodations Controller
+		app.bind(new AccomodationController());
+
 		app.listen(PORT);
 		System.out.println("Server running on port " + PORT + "...");
 	}

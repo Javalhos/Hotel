@@ -47,13 +47,12 @@ public class AccomodationDAO implements DAO<Accomodation> {
 	public boolean update (Accomodation data) {
 		sql = "UPDATE accomodations SET room = ?, cpf = ?, type = ?, " +
 		"entry_date = ?, departure_date = ?, status = ?, value = ? " +
-		"WHERE id = ?";
+		"WHERE id = '" + data.getId() + "'";
 
 		try {
 			DB.openConnection();
 			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
-			pst.setInt(0, data.getId());
 			pst.setInt(1, data.getRoom());
 			pst.setString(2, data.getCpf());
 			pst.setString(3, data.getAccType());
