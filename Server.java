@@ -23,6 +23,9 @@ public class Server {
 		// Service Controller
 		app.bind(new ServiceController());
 
+		// Consumed Controller
+		app.bind(new ConsumedController());
+
 		app.listen(PORT);
 		System.out.println("Server running on port " + PORT + "...");
 	}

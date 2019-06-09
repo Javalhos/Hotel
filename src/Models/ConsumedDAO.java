@@ -39,13 +39,12 @@ public class ConsumedDAO implements DAO<Consumed> {
 
 	public boolean update (Consumed data) {
 		sql = "UPDATE consumed_services SET accomodation_id = ?, service_id = ?, "
-				+ "name  = ?, value = ? WHERE id = ?";
+				+ "name  = ?, value = ? WHERE id = '" + data.getId() + "'";
 				
 		try {
 			DB.openConnection();
 			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
-			pst.setInt(0, data.getId());
 			pst.setInt(1, data.getAccomodation());
 			pst.setInt(2, data.getServiceId());
 			pst.setString(3, data.getServiceName());
@@ -87,7 +86,7 @@ public class ConsumedDAO implements DAO<Consumed> {
 	}
 
 	public Consumed search (Consumed data) {
-		sql = "SELECT * FROM consumed_services WHERE id = " + data.getId() + " OR"
+		sql = "SELECT * FROM consumed_services WHERE id = " + data.getId() + " OR "
 		+ "accomodation_id = " + data.getAccomodation() + " LIMIT 1";
 		
 		try {
