@@ -12,7 +12,7 @@ import src.Models.ConsumedDAO;
 public class ConsumedController extends Controller {
 
 	private final ConsumedDAO consumedDAO = new ConsumedDAO();
-	private class CreateServiceResponse {
+	private class CreateConsumedResponse {
 		@SuppressWarnings("unused")
 		public boolean success = false;
 	}
@@ -38,7 +38,7 @@ public class ConsumedController extends Controller {
 	public void store (Request req, Response res) {
 		Consumed consumed =this.parseBody(req, Consumed.class);
 
-		CreateServiceResponse result = new CreateServiceResponse();
+		CreateConsumedResponse result = new CreateConsumedResponse();
 
 		result.success = consumedDAO.create(consumed);
 		res.send(gson.toJson(result));
@@ -48,7 +48,7 @@ public class ConsumedController extends Controller {
 	public void edit (Request req, Response res) {
 		Consumed consumed = this.parseBody(req, Consumed.class);
 
-		CreateServiceResponse result = new CreateServiceResponse();
+		CreateConsumedResponse result = new CreateConsumedResponse();
 
 		result.success = consumedDAO.update(consumed);
 		res.send(gson.toJson(result));
@@ -59,7 +59,7 @@ public class ConsumedController extends Controller {
 		Consumed consumed = new Consumed();
 		consumed.setId(Integer.parseInt(req.getParam("id")));
 
-		CreateServiceResponse result = new CreateServiceResponse();
+		CreateConsumedResponse result = new CreateConsumedResponse();
 
 		result.success = consumedDAO.destroy(consumed);
 		res.send(gson.toJson(result));
