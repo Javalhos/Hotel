@@ -14,7 +14,7 @@ public class PaymentDAO implements DAO<Payment> {
 
 	public boolean create (Payment data) {
 		sql = "INSERT INTO `payment` " +
-		"(accomodation_id, tax, services_value, total_value, payment_type, status) " +
+		"(accomodation_id, tax, services_value, total_value, payment_type, status) VALUES " +
 		"(?, ?, ?, ?, ?, ?)";
 
 		try {
@@ -42,15 +42,14 @@ public class PaymentDAO implements DAO<Payment> {
 	}
 
 	public boolean update (Payment data) {
-		sql = "UPDATE `payment` SET tax = ?, services_value = ? " +
+		sql = "UPDATE `payment` SET tax = ?, services_value = ?, " +
 		"total_value = ?, payment_type = ?, status = ? " +
-		"WHERE id = ?";
+		"WHERE id = '" + data.getId() + "'";
 
 		try {
 			DB.openConnection();
 			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
-			pst.setInt(0, data.getId());
 			pst.setFloat(1, data.getTax());
 			pst.setFloat(2, data.getService());
 			pst.setFloat(3, data.getTotal());

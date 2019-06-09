@@ -20,6 +20,9 @@ public class Server {
 		// Room Controller
 		app.bind(new RoomController());
 		
+		// Payment Controller
+		app.bind(new PaymentController());
+		
 		// Service Controller
 		app.bind(new ServiceController());
 
