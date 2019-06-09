@@ -1,4 +1,4 @@
-package Models;
+package src.Models;
 
 // Java & 3rd Party
 import src.Data.User;
@@ -128,7 +128,7 @@ public class UserDAO implements DAO<User> {
 			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			Collection<User> users = new ArrayList();
+			Collection<User> users = new ArrayList<User>();
 			while (rs.next()) {
 				User user = new User();
 

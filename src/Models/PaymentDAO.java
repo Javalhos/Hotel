@@ -1,13 +1,13 @@
-package Models;
+package src.Models;
 
 // Java & 3rd Party
-import src.Data.Payment;
-import src.Database.DB;
-
-// Project
 import java.sql.*;
 import java.util.Collection;
 import java.util.ArrayList;
+
+// Project
+import src.Data.Payment;
+import src.Database.DB;
 
 public class PaymentDAO implements DAO<Payment> {
 	private String sql = "";
@@ -126,9 +126,9 @@ public class PaymentDAO implements DAO<Payment> {
 			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			Collection<Payment> payments = new ArrayList();
+			Collection<Payment> payments = new ArrayList<Payment>();
 			while(rs.next()) {
-				Payment payment = new Data.Payment();
+				Payment payment = new Payment();
 
 				payment.setId(rs.getInt("id"));
 				payment.setAccId(rs.getInt("accomodation_id"));

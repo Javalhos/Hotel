@@ -1,16 +1,15 @@
-package Models;
+package src.Models;
 
 // Java & 3rd Party
-import src.Data.User;
-import src.Database.DB;
-
-// Project
 import java.sql.*;
 import java.util.Collection;
-
-import Data.Accomodation;
-
 import java.util.ArrayList;
+
+// Project
+import src.Database.DB;
+import src.Data.Accomodation;
+
+
 
 public class AccomodationDAO implements DAO<Accomodation> {
 	private String sql = "";
@@ -106,7 +105,7 @@ public class AccomodationDAO implements DAO<Accomodation> {
 			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			Accomodation accomodation = new User();
+			Accomodation accomodation = new Accomodation();
 			while(rs.next()) {
 				accomodation.setId(rs.getInt("id"));
 				accomodation.setRoom(rs.getInt("room"));
@@ -133,7 +132,7 @@ public class AccomodationDAO implements DAO<Accomodation> {
 			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			Collection<Accomodation> accomodations = new ArrayList();
+			Collection<Accomodation> accomodations = new ArrayList<Accomodation>();
 			while (rs.next()) {
 				Accomodation accomodation = new Accomodation();
 

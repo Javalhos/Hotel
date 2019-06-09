@@ -1,4 +1,4 @@
-package Data;
+package src.Data;
 
 public class Payment {
 	private int id;
@@ -16,7 +16,7 @@ public class Payment {
 		this.id = id;
 	}
 
-	public int getid() {
+	public int getId() {
 		return id;
 	}
 

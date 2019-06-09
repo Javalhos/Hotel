@@ -1,4 +1,4 @@
-package Models;
+package src.Models;
 
 import src.Data.Services;
 import src.Database.DB;
@@ -117,7 +117,7 @@ public class ServicesDAO implements DAO<Services> {
 			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			Collection<Services> services = new ArrayList();
+			Collection<Services> services = new ArrayList<Services>();
 			while (rs.next()) {
 				Services service = new Services();
 

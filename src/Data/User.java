@@ -1,4 +1,4 @@
-package Data;
+package src.Data;
 
 public class User {
 	private String cpf;

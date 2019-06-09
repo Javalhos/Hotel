@@ -1,16 +1,16 @@
-package Models;
+package src.Models;
 
 import src.Data.Consumed;
-import src.aDatabase.DB;
+import src.Database.DB;
 
 import java.sql.*;
 import java.util.Collection;
 import java.util.ArrayList;
 
-public class ServicesDAO implements DAO<Services> {
+public class ConsumedDAO implements DAO<Consumed> {
 	private String sql = "";
 
-	public boolean create (ConsumedServices data) {
+	public boolean create (Consumed data) {
 		sql = "INSERT INTO consumed_services" + 
 			"(accomodation_id, service_id, name, value)" +
 			"VALUES (?, ?, ?, ?)";
@@ -37,7 +37,7 @@ public class ServicesDAO implements DAO<Services> {
 		}
 	}
 
-	public boolean update (ConsumedServices data) {
+	public boolean update (Consumed data) {
 		sql = "UPDATE consumed_services SET accomodation_id = ?, service_id = ?, "
 				+ "name  = ?, value = ? WHERE id = ?";
 				
@@ -64,7 +64,7 @@ public class ServicesDAO implements DAO<Services> {
 		}
 	}
 
-	public boolean destroy (ConsumedServices data) {
+	public boolean destroy (Consumed data) {
 		sql = "DELETE FROM consumed_services WHERE id = ?";
 		
 		try {
@@ -86,7 +86,7 @@ public class ServicesDAO implements DAO<Services> {
 		}
 	}
 
-	public ConsumedServices search (ConsumedServices data) {
+	public Consumed search (Consumed data) {
 		sql = "SELECT * FROM consumed_services WHERE id = " + data.getId() + " OR"
 		+ "accomodation_id = " + data.getAccomodation() + " LIMIT 1";
 		
@@ -95,7 +95,7 @@ public class ServicesDAO implements DAO<Services> {
 			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			ConsumedServices consumedService = new ConsumedServices();
+			Consumed consumedService = new Consumed();
 
 			while(rs.next()) {
 				consumedService.setId(rs.getInt("id"));
@@ -112,7 +112,7 @@ public class ServicesDAO implements DAO<Services> {
 		}
 	}
 
-	public Collection<ConsumedServices> list (String where) {
+	public Collection<Consumed> list (String where) {
 		sql = "SELECT * FROM consumed_services " + where;
 		
 		try {
@@ -120,19 +120,19 @@ public class ServicesDAO implements DAO<Services> {
 			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			Collection<ConsumedServices> consumedServices = new ArrayList();
+			Collection<Consumed> consumed = new ArrayList<Consumed>();
 			while (rs.next()) {
-				ConsumedServices consumedService = new ConsumedServices();
+				Consumed consumedService = new Consumed();
 
 				consumedService.setId(rs.getInt("id"));
 				consumedService.setAccomodation(rs.getInt("accomodation_id"));
 				consumedService.setServiceId(rs.getInt("service_id"));
 				consumedService.setServiceName(rs.getString("name"));
 				consumedService.setServiceValue(rs.getFloat("value"));
-				consumedServices.add(consumedService);
+				consumed.add(consumedService);
 			}
 
-			return consumedServices;
+			return consumed;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

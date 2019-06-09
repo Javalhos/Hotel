@@ -1,4 +1,5 @@
 CREATE DATABASE hotel;
+USE `hotel`;
 
 -- CREATE TABLES
 -- Cria a tabela Hóspedes
@@ -20,7 +21,7 @@ CREATE TABLE `rooms` (
 	`type` ENUM('NORMAL', 'LUXO', 'PRESIDENCIAL', 'SUITE') NOT NULL,
 	`beds` INT(2) NOT NULL,
 	`extension_phone` INT(2) NOT NULL,
-	`status` ENUM('DISPONÍVEL', 'RESERVADO', 'MANUTENCAO'),
+	`status` ENUM('DISPONIVEL', 'RESERVADO', 'MANUTENCAO'),
 	`daily_rate` FLOAT(5) NOT NULL,
 	PRIMARY KEY (room)
 );
@@ -78,14 +79,14 @@ INSERT INTO `users` (`cpf`, `name`, `email`, `password`, `contact_number`, `addr
 
 -- Insert into Rooms
 INSERT INTO `rooms` (`room`, `type`, `beds`, `extension_phone`, `status`, `daily_rate`) VALUES
-('01', 'NORMAL', '2', '01', 'DISPONÍVEL', '150.00'),
-('02', 'NORMAL', '1', '02', 'DISPONÍVEL', '150.00'),
+('01', 'NORMAL', '2', '01', 'DISPONIVEL', '150.00'),
+('02', 'NORMAL', '1', '02', 'DISPONIVEL', '150.00'),
 ('03', 'NORMAL', '1', '03', 'RESERVADO', '150.00'),
 ('04', 'LUXO', '2', '04', 'RESERVADO', '250.00'),
-('05', 'LUXO', '2', '05', 'DISPONÍVEL', '250.00'),
+('05', 'LUXO', '2', '05', 'DISPONIVEL', '250.00'),
 ('06', 'LUXO', '3', '06', 'MANUTENCAO', '250.00'),
 ('07', 'PRESIDENCIAL', '1', '07', 'RESERVADO', '500.00'),
-('08', 'SUITE', '4', '08', 'DISPONÍVEL', '200.00');
+('08', 'SUITE', '4', '08', 'DISPONIVEL', '200.00');
 
 -- Insert into Services
 INSERT INTO `services` (`name`, `description`, `value`) VALUES
