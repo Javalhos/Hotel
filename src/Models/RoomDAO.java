@@ -37,21 +37,20 @@ public class RoomDAO implements DAO<Room> {
 				return false;
 			}
 		} catch (Exception e) {
-			//TODO: handle exception
+			e.printStackTrace();
 			return false;
 		}
 	}
 
 	public boolean update (Room data) {
-		sql = "UPDATE rooms SET beds = ?, type = ?, extension_phone = ?"
-				+ "daily_rate = ?, status = ? WHERE room = ?";
-
+		sql = "UPDATE rooms SET beds = ?, type = ?, extension_phone = ?, "
+				+ "daily_rate = ?, status = ? WHERE room = '" + data.getRoom() +"'";
+		System.out.println(sql);
 				
 		try {
 			DB.openConnection();
 			PreparedStatement pst = DB.connection.prepareStatement(sql);
 
-			pst.setInt(0, data.getRoom());
 			pst.setInt(1, data.getBeds());
 			pst.setString(2, data.getType());
 			pst.setString(3, data.getExtensionPhone());
@@ -66,7 +65,7 @@ public class RoomDAO implements DAO<Room> {
 				return false;
 			}
  		} catch (Exception e) {
-			//TODO: handle exception
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -89,7 +88,7 @@ public class RoomDAO implements DAO<Room> {
 				return false;
 			}
 		} catch (Exception e) {
-			//TODO: handle exception
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -103,9 +102,19 @@ public class RoomDAO implements DAO<Room> {
 			Statement statement = DB.connection.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 
-			return (Room) rs;
+			Room room = new Room();
+			while(rs.next()) {
+				room.setRoom(rs.getInt("room"));
+				room.setBeds(rs.getInt("beds"));
+				room.setDailyRate(rs.getFloat("daily_rate"));
+				room.setExtensionPhone(rs.getString("extension_phone"));
+				room.setStatus(rs.getString("status"));
+				room.setType(rs.getString("type"));
+			}
+
+			return room;
 		} catch (Exception e) {
-			//TODO: handle exception
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -135,8 +144,7 @@ public class RoomDAO implements DAO<Room> {
 
 			return rooms;
 		} catch (Exception e) {
-			//TODO: handle exception
-			System.out.println(e.toString());
+			e.printStackTrace();
 			return null;
 		}
 	}
