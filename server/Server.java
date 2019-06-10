@@ -4,8 +4,8 @@ import java.io.IOException;
 
 // Importar os Controllers
 import src.Controllers.*;
+
 /**
- import src.Controllers.RoomController;
  * Server
  */
 public class Server {
@@ -14,9 +14,12 @@ public class Server {
 		Express app = new Express();
 
 		// Set Middlewares
-		app.use(Middleware.statics("./client/dist")); // Static Files Middleware
+		app.use(Middleware.statics("../client/dist")); // Static Files Middleware
 		app.use((req, res) -> res.setContentType("application/json"));
 		
+		// Auth Controller
+		app.bind(new AuthController());
+
 		// Room Controller
 		app.bind(new RoomController());
 		

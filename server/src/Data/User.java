@@ -4,10 +4,9 @@ public class User {
 	private String cpf;
 	private String name;
 	private String email;
-	private String password;
+	private transient String password;
 	private String contactNumber;
 	private String address;
-	private String birthday;
 	private String level;
 
 	public User() {
@@ -59,14 +58,6 @@ public class User {
 
 	public String getAddress() {
 		return address;
-	}
-
-	public void setBirthday(String birthday) {
-		this.birthday = birthday;
-	}
-
-	public String getBirthday() {
-		return birthday;
 	}
 
 	public void setLevel(String level) {

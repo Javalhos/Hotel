@@ -1,6 +1,10 @@
 {
 	"workbench.colorCustomizations": {},
 	"files.exclude": {
-		"**/*.class": true
+		"**/*.class": true,
+		"**/.classpath": true,
+		"**/.project": true,
+		"**/.settings": true,
+		"**/.factorypath": true
 	}
 }

@@ -1,4 +1,5 @@
 @echo off
+cd server
 set CLASSPATH=./lib/*;./
 
 echo Compiling files...
@@ -6,4 +7,5 @@ javac ./src/Controllers/*.java ./src/Data/*.java ./src/Database/*.java ./src/Mod
 echo Starting server...
 java Server
 
+cd ..
 pause

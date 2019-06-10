@@ -10,7 +10,6 @@ CREATE TABLE `users` (
 	`password` VARCHAR(255),
 	`contact_number` VARCHAR(10),
 	`address` VARCHAR(255),
-	`birthday` DATE,
 	`level` ENUM('USER', 'EMPLOYEE', 'ADMIN'),
 	PRIMARY KEY (cpf)
 );
@@ -70,13 +69,12 @@ CREATE TABLE `payment` (
 	PRIMARY KEY(id)
 );
 
--- Insere os usuários na tabela users.
-INSERT INTO `users` (`cpf`, `name`, `email`, `password`, `contact_number`, `address`, `birthday`, `level`) VALUES 
-('000.000.000-00', 'Tatiana Vitorello', 'vitorellotts@gmail.com', 'teste123', '00000-0000', 'Rua Cedral', '1998-10-23', 'ADMIN'),
-('111.111.111-11', 'Fulano da Silva', 'fulanosilva@gmail.com', 'teste1', '11111-1111', 'Rua Central', '1998-10-23', 'EMPLOYEE'),
-('222.222.222-22', 'Ciclano Castro', 'ciclanocastro@gmail.com', 'teste2', '22222-2222', 'Vila Luzita', '1998-10-23', 'USER'),
-('333.333.333-33', 'Beltrano Souza', 'beltranosouza@gmail.com', 'teste3', '33333-3333', 'Vila Rica', '1998-10-23', 'USER'),
-('444.444.444-44', 'Moquidesia Antunes', 'moquidesiantunes@gmail.com', 'teste3', '44444-4444', 'Vila Mestre', '1998-10-23', 'USER');
+INSERT INTO `users` (`cpf`, `name`, `email`, `password`, `contact_number`, `address`, `level`) VALUES 
+('000.000.000-00', 'Tatiana Vitorello', 'vitorellotts@gmail.com', 'teste123', '00000-0000', 'Rua Cedral', 'ADMIN'),
+('111.111.111-11', 'Fulano da Silva', 'fulanosilva@gmail.com', 'teste1', '11111-1111', 'Rua Central', 'EMPLOYEE'),
+('222.222.222-22', 'Ciclano Castro', 'ciclanocastro@gmail.com', 'teste2', '22222-2222', 'Vila Luzita', 'USER'),
+('333.333.333-33', 'Beltrano Souza', 'beltranosouza@gmail.com', 'teste3', '33333-3333', 'Vila Rica', 'USER'),
+('444.444.444-44', 'Moquidesia Antunes', 'moquidesiantunes@gmail.com', 'teste3', '44444-4444', 'Vila Mestre', 'USER');
 
 -- Insert into Rooms
 INSERT INTO `rooms` (`room`, `type`, `beds`, `extension_phone`, `status`, `daily_rate`) VALUES

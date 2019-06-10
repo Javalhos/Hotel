@@ -1,2 +1,4 @@
 
 *.class
+
+client/package-lock\.json

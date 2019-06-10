@@ -13,8 +13,7 @@ public class UserDAO implements DAO<User> {
 	private String sql = "";
 
 	public boolean create (User data) {
-		sql = "INSERT INTO users " + "(cpf, name, email, password, contact_number, address, birthday, level)"
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		sql = "INSERT INTO `users` (`cpf`, `name`, `email`, `password`, `contact_number`, `address`, `level`) VALUES (?, ?, ?, ?, ?, ?, ?)";
 				
 		try {
 			DB.openConnection();
@@ -26,8 +25,7 @@ public class UserDAO implements DAO<User> {
 			pst.setString(4, data.getPassword());
 			pst.setString(5, data.getContactNumber());
 			pst.setString(6, data.getAddress());
-			pst.setString(7, data.getBirthday());
-			pst.setString(8, data.getLevel());
+			pst.setString(7, data.getLevel());
 
 			if (pst.executeUpdate() > 0) {
 				DB.closeConnection();
@@ -43,8 +41,7 @@ public class UserDAO implements DAO<User> {
 	}
 
 	public boolean update (User data) {
-		sql = "UPDATE users SET name = ?, email = ?, password = ?"
-				+ "contact_number = ?, address = ?, birthday = ?, level = ? WHERE cpf = ?";
+		sql = "UPDATE `users` SET `name` = ?, `email` = ?, `password` = ?, `contact_number` = ?, `address` = ?, `level` = ? WHERE `cpf` = ?";
 				
 		try {
 			DB.openConnection();
@@ -55,8 +52,8 @@ public class UserDAO implements DAO<User> {
 			pst.setString(3, data.getPassword());
 			pst.setString(4, data.getContactNumber());
 			pst.setString(5, data.getAddress());
-			pst.setString(6, data.getBirthday());
-			pst.setString(7, data.getLevel());
+			pst.setString(6, data.getLevel());
+			pst.setString(7, data.getCpf());
 
 			if (pst.executeUpdate() > 0) {
 				DB.closeConnection();
@@ -94,24 +91,28 @@ public class UserDAO implements DAO<User> {
 	}
 
 	public User search (User data) {
-		sql = "SELECT * FROM users WHERE cpf = '" + data.getCpf() + "' OR " +
-		"email = '" + data.getEmail() + "'";
-		
+		sql = "SELECT * FROM `users` WHERE `cpf` = ? OR `email` = ?";
+
 		try {
 			DB.openConnection();
-			Statement statement = DB.connection.createStatement();
-			ResultSet rs = statement.executeQuery(sql);
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
+
+			pst.setString(1, data.getCpf());
+			pst.setString(2, data.getEmail());
+
+			ResultSet rs = pst.executeQuery();
 
 			User user = new User();
-			while(rs.next()) {
-				user.setCpf(rs.getString("cpf"));
-				user.setName(rs.getString("name"));
-				user.setEmail(rs.getString("email"));
-				user.setContactNumber(rs.getString("contact_number"));
-				user.setAddress(rs.getString("address"));
-				user.setBirthday(rs.getString("birthday"));
-				user.setLevel(rs.getString("level"));
-			}
+			if (!rs.next()) 
+				return null;
+			
+			user.setCpf(rs.getString("cpf"));
+			user.setName(rs.getString("name"));
+			user.setEmail(rs.getString("email"));
+			user.setPassword(rs.getString("password"));
+			user.setContactNumber(rs.getString("contact_number"));
+			user.setAddress(rs.getString("address"));
+			user.setLevel(rs.getString("level"));
 
 			return user;
 		} catch (Exception e) {
@@ -137,7 +138,6 @@ public class UserDAO implements DAO<User> {
 				user.setEmail(rs.getString("email"));
 				user.setContactNumber(rs.getString("contact_number"));
 				user.setAddress(rs.getString("address"));
-				user.setBirthday(rs.getString("birthday"));
 				user.setLevel(rs.getString("level"));
 				users.add(user);
 			}
