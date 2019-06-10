@@ -3,6 +3,7 @@ import { Buffer } from 'buffer'
 
 import { Http } from './Http';
 import { Errors } from './Form';
+import { Event } from './Event';
 
 const TOKEN_KEY = 'hotel-auth-token'
 
@@ -57,6 +58,7 @@ export const Auth = {
 	signOut () {
 		this.token = undefined
 		this._user = null
+		Event.fire('auth-status-changed', { signedIn: false })
 	},
 
 	async loadUser () {
@@ -73,6 +75,7 @@ export const Auth = {
 		// Tenta pegar o usuário.
 		try {
 			await this.loadUser()
+			Event.fire('auth-status-changed', { signedIn: true })
 			return
 		} catch (error) {
 			const { response, request, config } = error
