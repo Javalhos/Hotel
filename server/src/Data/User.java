@@ -4,7 +4,7 @@ public class User {
 	private String cpf;
 	private String name;
 	private String email;
-	private transient String password;
+	private String password;
 	private String contactNumber;
 	private String address;
 	private String level;

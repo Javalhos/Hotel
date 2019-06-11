@@ -1,10 +1,32 @@
 <template>
-	<h1>Hello</h1>
+	<room-list :rooms="rooms"></room-list>
 </template>
 
 <script>
-export default {
+import RoomList from '../components/Customer/Room/RoomList';
 
+
+export default {
+	components: { RoomList },
+
+	async created () {
+		try {
+			const { data } = await this.$http.get('/api/room')
+
+			this.rooms = data
+		} catch (e) {
+			console.log(e)
+			this.rooms = []
+		}
+	},
+
+	filters: {  },
+
+	data () {
+		return {
+			rooms: []
+		}
+	}
 }
 </script>
 

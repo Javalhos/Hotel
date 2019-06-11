@@ -13,9 +13,7 @@ public class RoomDAO implements DAO<Room> {
 	private String sql = "";
 
 	public boolean create (Room data) {
-		sql = "INSERT INTO rooms" + 
-			"(room, beds, type, extension_phone, daily_rate, status)" +
-			"VALUES (?, ?, ?, ?, ?, ?)";
+		sql = "INSERT INTO `rooms` (`room`, `beds`, `type`, `extension_phone`, `daily_rate`, `status`) VALUES (?, ?, ?, ?, ?, ?)";
 
 			
 		try {
@@ -43,10 +41,9 @@ public class RoomDAO implements DAO<Room> {
 	}
 
 	public boolean update (Room data) {
-		sql = "UPDATE rooms SET beds = ?, type = ?, extension_phone = ?, "
-				+ "daily_rate = ?, status = ? WHERE room = '" + data.getRoom() +"'";
+		sql = "UPDATE `rooms` SET `beds` = ?, `type` = ?, `extension_phone` = ?, `daily_rate` = ?, `status` = ? WHERE `room` = ? LIMIT 1";
 		System.out.println(sql);
-				
+
 		try {
 			DB.openConnection();
 			PreparedStatement pst = DB.connection.prepareStatement(sql);
@@ -56,6 +53,7 @@ public class RoomDAO implements DAO<Room> {
 			pst.setString(3, data.getExtensionPhone());
 			pst.setFloat(4, data.getDailyRate());
 			pst.setString(5, data.getStatus());
+			pst.setInt(6, data.getRoom());
 
 			if (pst.executeUpdate() > 0) {
 				DB.closeConnection();
@@ -71,7 +69,7 @@ public class RoomDAO implements DAO<Room> {
 	}
 
 	public boolean destroy (Room data) {
-		sql = "DELETE FROM rooms WHERE room = ?";
+		sql = "DELETE FROM rooms WHERE room = ? LIMIT 1";
 
 		try {
 			DB.openConnection();
@@ -94,24 +92,25 @@ public class RoomDAO implements DAO<Room> {
 	}
 
 	public Room search (Room data) {
-		sql = "SELECT * FROM rooms WHERE room LIKE '%" + data.getRoom() + "%' LIMIT 1";
+		sql = "SELECT * FROM rooms WHERE room = ? LIMIT 1";
 
 		try {
 			DB.openConnection();
+			PreparedStatement pst = DB.connection.prepareStatement(sql);
+			pst.setInt(1, data.getRoom());
+			ResultSet rs = pst.executeQuery();
 
-			Statement statement = DB.connection.createStatement();
-			ResultSet rs = statement.executeQuery(sql);
-
+			if (!rs.next())
+				return null;
+			
 			Room room = new Room();
-			while(rs.next()) {
-				room.setRoom(rs.getInt("room"));
-				room.setBeds(rs.getInt("beds"));
-				room.setDailyRate(rs.getFloat("daily_rate"));
-				room.setExtensionPhone(rs.getString("extension_phone"));
-				room.setStatus(rs.getString("status"));
-				room.setType(rs.getString("type"));
-			}
-
+			room.setRoom(rs.getInt("room"));
+			room.setBeds(rs.getInt("beds"));
+			room.setDailyRate(rs.getFloat("daily_rate"));
+			room.setExtensionPhone(rs.getString("extension_phone"));
+			room.setStatus(rs.getString("status"));
+			room.setType(rs.getString("type"));
+			
 			return room;
 		} catch (Exception e) {
 			e.printStackTrace();

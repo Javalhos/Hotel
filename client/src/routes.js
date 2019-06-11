@@ -7,11 +7,13 @@ const Route = new Router({ linkExactActiveClass: 'uk-active' }, viewsHandler)
 
 Route.add('/', '').children(Route => {
 	Route.group('auth', [ GuestGuard({ name: 'home' }) ], Route => {
-		Route.add('signin', 'Auth/Signin')
-		Route.add('signup', 'Auth/Signup')
+		Route.add('signin', 'Auth/Signin', 'login')
+		Route.add('signup', 'Auth/Signup', 'register')
 	})
 
 	Route.add('', 'Home', 'home')
+
+	Route.add('quarto/:id', 'Customer/ReservarQuarto').guard(AuthGuard({ name: 'login' }))
 })
 
 export const routes = Route.build()

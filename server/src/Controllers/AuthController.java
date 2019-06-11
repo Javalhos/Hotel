@@ -63,6 +63,7 @@ public class AuthController extends Controller {
 			return;
 		}
 
+		user.setPassword(null);
 		res.send(gson.toJson(user));
 	}
 }

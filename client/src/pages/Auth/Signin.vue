@@ -53,11 +53,13 @@ export default {
 	methods: {
 		async login () {
 			this.loading = true
-			console.log('Hou')
 			try {
 				await this.$auth.signIn(this.credentials)
-				console.log('hey')
-				this.$router.push({ name: 'home' })
+				const { redirect } = this.$route.query
+				if (!!redirect)
+					this.$router.push({ path: redirect })
+				else
+					this.$router.push({ name: 'home' })
 			} catch (errors) {
 				console.log(errors)
 				this.errors.record(errors)
