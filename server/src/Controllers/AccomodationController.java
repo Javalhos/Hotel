@@ -24,13 +24,21 @@ public class AccomodationController extends Controller {
 		res.send(gson.toJson(accomodations));
 	}
 
-	@DynExpress(context = "/accomodation/:id")
+	@DynExpress(context = "/accomodation/:cpf/:id")
 	public void show (Request req, Response res) {
 		Accomodation accomodation = new Accomodation();
-		accomodation.setId(Integer.parseInt(req.getParam("id")));
+
+		if (req.getParam("cpf") != null) {
+			accomodation.setCpf(req.getParam("cpf"));
+		}
+
+		if (req.getParam("id") != "0") {
+			accomodation.setId(Integer.parseInt(req.getParam("id")));
+		}
 
 		Object acc = new Object();
 		acc = accomodationDAO.search(accomodation);
+		System.out.println(acc);
 		res.send(gson.toJson(acc));
 	}
 
@@ -49,7 +57,7 @@ public class AccomodationController extends Controller {
 		Accomodation accomodation = this.parseBody(req, Accomodation.class);
 
 		CreateAccomodationResponse result = new CreateAccomodationResponse();
-
+		
 		result.success = accomodationDAO.update(accomodation);
 		res.send(gson.toJson(result));
 	}

@@ -4,9 +4,7 @@
 			<nav uk-navbar>
 				<div class="uk-navbar-left">
 					<ul class="uk-navbar-nav">
-						<router-link to="/" tag="li">
-							<a>Início</a>
-						</router-link>
+						<router-link tag="a" to="/">HOTELARIA CHERNOBYL</router-link>
 					</ul>
 				</div>
 				<div class="uk-navbar-right">
@@ -20,6 +18,12 @@
 							</router-link>
 						</template>
 						<template v-else>
+							<router-link to="/" tag="li">
+								<a>Início</a>
+							</router-link>
+							<router-link to="/admin" tag="li" v-if="user.level === 'ADMIN'">
+								<a>Administrador</a>
+							</router-link>
 							<li>
 								<a @click="logout">Sair</a>
 							</li>
@@ -36,6 +40,7 @@ import { Event } from '../common';
 
 export default {
 	created () {
+		console.log(this.user)
 		Event.listen('auth-status-changed', ({ signedIn }) => {
 			this.isLoggedIn = signedIn
 		})
@@ -43,7 +48,8 @@ export default {
 
 	data () {
 		return {
-			isLoggedIn: this.$auth.isSignedIn()
+			isLoggedIn: this.$auth.isSignedIn(),
+			user: this.$auth._user
 		}
 	},
 

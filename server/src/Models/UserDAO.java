@@ -91,16 +91,12 @@ public class UserDAO implements DAO<User> {
 	}
 
 	public User search (User data) {
-		sql = "SELECT * FROM `users` WHERE `cpf` = ? OR `email` = ?";
+		sql = "SELECT * FROM `users` WHERE `cpf` = '" + data.getCpf() +"'";
 
 		try {
 			DB.openConnection();
-			PreparedStatement pst = DB.connection.prepareStatement(sql);
-
-			pst.setString(1, data.getCpf());
-			pst.setString(2, data.getEmail());
-
-			ResultSet rs = pst.executeQuery();
+			Statement statement = DB.connection.createStatement();
+			ResultSet rs = statement.executeQuery(sql);
 
 			User user = new User();
 			if (!rs.next()) 

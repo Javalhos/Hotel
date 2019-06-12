@@ -17,6 +17,13 @@ public class PaymentController extends Controller {
 		public boolean success = false;
 	}
 
+	@DynExpress(context = "/payment/pendent")
+	public void pendents (Request req, Response res) {
+		Collection<Payment> payments = paymentDAO.list("WHERE status = 'PENDENTE'");
+
+		res.send(gson.toJson(payments));
+	}
+
 	@DynExpress(context = "/payments")
 	public void index(Request req, Response res) {
 		Collection<Payment> payments = paymentDAO.list("");
@@ -47,7 +54,7 @@ public class PaymentController extends Controller {
 	@DynExpress(context = "/payment", method = RequestMethod.PATCH)
 	public void update (Request req, Response res) {
 		Payment payment = this.parseBody(req, Payment.class);
-
+		
 		CreatePaymentResponse result = new CreatePaymentResponse();
 
 		result.success = paymentDAO.update(payment);

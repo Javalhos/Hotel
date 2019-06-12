@@ -48,7 +48,7 @@ public class AccomodationDAO implements DAO<Accomodation> {
 		sql = "UPDATE accomodations SET room = ?, cpf = ?, type = ?, " +
 		"entry_date = ?, departure_date = ?, status = ?, value = ? " +
 		"WHERE id = '" + data.getId() + "'";
-
+		
 		try {
 			DB.openConnection();
 			PreparedStatement pst = DB.connection.prepareStatement(sql);
@@ -97,7 +97,8 @@ public class AccomodationDAO implements DAO<Accomodation> {
 	}
 
 	public Accomodation search (Accomodation data) {
-		sql = "SELECT * FROM accomodations WHERE id = '" + data.getId() + "'";
+		sql = "SELECT * FROM accomodations WHERE cpf = '" + data.getCpf() + "' OR "
+		+ "id = '" + data.getId() + "'";
 
 		try {
 			DB.openConnection();

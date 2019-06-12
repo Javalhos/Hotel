@@ -35,6 +35,9 @@ public class Server {
 		// Accomodations Controller
 		app.bind(new AccomodationController());
 
+		// User Controller
+		app.bind(new UserController());
+
 		app.listen(PORT);
 		System.out.println("Server running on port " + PORT + "...");
 	}

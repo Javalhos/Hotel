@@ -14,8 +14,8 @@ public class PaymentDAO implements DAO<Payment> {
 
 	public boolean create (Payment data) {
 		sql = "INSERT INTO `payment` " +
-		"(accomodation_id, tax, services_value, total_value, payment_type, status) VALUES " +
-		"(?, ?, ?, ?, ?, ?)";
+		"(accomodation_id, tax, services_value, total_value, paid , payment_type, status) VALUES " +
+		"(?, ?, ?, ?, ?, ?, ?)";
 
 		try {
 			DB.openConnection();
@@ -25,8 +25,9 @@ public class PaymentDAO implements DAO<Payment> {
 			pst.setFloat(2, data.getTax());
 			pst.setFloat(3, data.getService());
 			pst.setFloat(4, data.getTotal());
-			pst.setString(5, data.getType());
-			pst.setString(6, data.getStatus());
+			pst.setFloat(5, data.getPaid());
+			pst.setString(6, data.getType());
+			pst.setString(7, data.getStatus());
 
 			if (pst.executeUpdate() > 0) {
 				DB.closeConnection();
@@ -43,9 +44,9 @@ public class PaymentDAO implements DAO<Payment> {
 
 	public boolean update (Payment data) {
 		sql = "UPDATE `payment` SET tax = ?, services_value = ?, " +
-		"total_value = ?, payment_type = ?, status = ? " +
-		"WHERE id = '" + data.getId() + "'";
-
+		"total_value = ?, paid = ?, payment_type = ?, status = ? " +
+		"WHERE accomodation_id = '" + data.getAccId() + "'";
+		System.out.println(sql);
 		try {
 			DB.openConnection();
 			PreparedStatement pst = DB.connection.prepareStatement(sql);
@@ -53,8 +54,9 @@ public class PaymentDAO implements DAO<Payment> {
 			pst.setFloat(1, data.getTax());
 			pst.setFloat(2, data.getService());
 			pst.setFloat(3, data.getTotal());
-			pst.setString(4, data.getType());
-			pst.setString(5, data.getStatus());
+			pst.setFloat(4, data.getPaid());
+			pst.setString(5, data.getType());
+			pst.setString(6, data.getStatus());
 
 			if (pst.executeUpdate() > 0) {
 				DB.closeConnection();
@@ -106,6 +108,7 @@ public class PaymentDAO implements DAO<Payment> {
 				payment.setTax(rs.getFloat("tax"));
 				payment.setService(rs.getFloat("services_value"));
 				payment.setTotal(rs.getFloat("total_value"));
+				payment.setPaid(rs.getFloat("paid"));
 				payment.setType(rs.getString("payment_type"));
 				payment.setStatus(rs.getString("status"));
 			}
@@ -134,6 +137,7 @@ public class PaymentDAO implements DAO<Payment> {
 				payment.setTax(rs.getFloat("tax"));
 				payment.setService(rs.getFloat("services_value"));
 				payment.setTotal(rs.getFloat("total_value"));
+				payment.setPaid(rs.getFloat("paid"));
 				payment.setType(rs.getString("payment_type"));
 				payment.setStatus(rs.getString("status"));
 				payments.add(payment);

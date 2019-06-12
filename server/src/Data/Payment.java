@@ -6,6 +6,7 @@ public class Payment {
 	private float tax;
 	private float services;
 	private float total;
+	private float paid;
 	private String type;
 	private String status;
 
@@ -42,6 +43,14 @@ public class Payment {
 
 	public float getService() {
 		return services;
+	}
+
+	public void setPaid(float paid) {
+		this.paid = paid;
+	}
+
+	public float getPaid() {
+		return paid;
 	}
 
 	public void setTotal(float total) {
