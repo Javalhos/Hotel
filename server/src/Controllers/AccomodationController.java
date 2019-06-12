@@ -24,6 +24,15 @@ public class AccomodationController extends Controller {
 		res.send(gson.toJson(accomodations));
 	}
 
+	@DynExpress(context = "/booking/:cpf")
+	public void getBooking (Request req, Response res) {
+		String cpf = req.getParam("cpf");
+		Collection<Accomodation> accomodation = accomodationDAO.list("WHERE type = 'RESERVA' AND " +
+		"cpf = '" + cpf + "' LIMIT 1");
+
+		res.send(gson.toJson(accomodation));
+	}
+
 	@DynExpress(context = "/accomodation/:cpf/:id")
 	public void show (Request req, Response res) {
 		Accomodation accomodation = new Accomodation();

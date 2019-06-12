@@ -48,18 +48,24 @@
 							<input type="text" class="uk-input" placeholder="Valor total..." v-model="total" disabled>
 						</div>
 						<div class="uk-width-1-2">
-							<label class="uk-form-label" for="level">Valor a ser Pago</label>
+							<label class="uk-form-label" for="level">Valor que já foi pago</label>
+							<input type="text" class="uk-input" placeholder="Valor a ser pago..." v-model="form.paid" disabled>
+						</div>
+					</div>
+					<div class="uk-margin">
+						<label class="uk-form-label" for="level">Valor a ser pago</label>
+						<div class="uk-form-controls">
 							<input type="text" class="uk-input" placeholder="Valor a ser pago..." v-model="paid">
 						</div>
-						<div class="uk-margin">
-							<button class="uk-button uk-button-primary" :disabled="registering" @click="register">
-								<span uk-spinner="ratio: 0.5" v-if="registering"></span>
-								<span v-else>Registrar</span>
-							</button>
-							<router-link to="/" tag="a" class="uk-button uk-button-default">
-								Cancelar
-							</router-link>
-						</div>
+					</div>
+					<div class="uk-margin">
+						<button class="uk-button uk-button-primary" :disabled="registering" @click="register">
+							<span uk-spinner="ratio: 0.5" v-if="registering"></span>
+							<span v-else>Registrar</span>
+						</button>
+						<router-link to="/" tag="a" class="uk-button uk-button-default">
+							Cancelar
+						</router-link>
 					</div>
 				</form>
 			</div>
@@ -128,10 +134,12 @@ export default {
 
 			try {
 				this.form.paid = Number(this.form.paid) + Number(this.paid)
-				this.form.total = this.form.total - this.form.paid
 
-				if (this.form.total === 0)
+				if (this.total === 0 || this.total < 0)
 					this.form.status = 'PAGO'
+
+				if (this.paid > this.total)
+					return alert('Você está pagando mais do que deve!')
 
 				const { success } = await this.$http.patch('/payment', this.form)
 

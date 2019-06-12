@@ -17,7 +17,7 @@ public class ConsumedController extends Controller {
 		public boolean success = false;
 	}
 
-	@DynExpress(context = "/consumed")
+	@DynExpress(context = "/consumeds")
 	public void index (Request req, Response res) {
 		Collection<Consumed> consumed = consumedDAO.list("");
 

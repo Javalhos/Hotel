@@ -1,15 +1,17 @@
 <template>
 	<div v-if="['EMPLOYEE', 'ADMIN'].includes(user.level)">
+		<div class="uk-margin">
+			<div class="uk-card uk-card-default uk-card-body">
+				<h3 class="uk-card-title uk-text-center@m">Seja bem vindo, {{ user.name }}!</h3>
+				<p class="uk-text-center@m">
+					Utilize os cards nesta página para executar seu trabalho da melhor
+					maneira possível! Aqui você pode executar uma nova hospedagem, 
+					um novo pagamento ou até mesmo registrar um usuário.
+				</p>
+			</div>
+		</div>
 		<div class="uk-child-width-1-2@m uk-grid-small uk-grid-match" uk-grid>
 			<div>
-				<div class="uk-card uk-card-default uk-card-body">
-					<h3 class="uk-card-title uk-text-center@m">Seja bem vindo, {{ user.name }}!</h3>
-					<p class="uk-text-center@m">
-						Utilize os cards nesta página para executar seu trabalho da melhor
-						maneira possível! Aqui você pode executar uma nova hospedagem, 
-						um novo pagamento ou até mesmo registrar um usuário.
-					</p>
-				</div>
 				<div class="uk-margin">
 					<div class="uk-card uk-card-default uk-card-body">
 						<h3 class="uk-card-title uk-text-center@m">Registro de Novos Usuários</h3>
@@ -25,6 +27,21 @@
 								Visualizar Usuários
 							</router-link>
 						</div>
+					</div>
+				</div>
+				<div class="uk-card uk-card-default uk-card-body">
+					<h3 class="uk-card-title uk-text-center@m">Registrar Novo Serviço Consumido</h3>
+					<p class="uk-text-center@m">
+						Aqui você pode realizar o registro de um novo serviço consumido de acordo
+						com a acomodação.
+					</p>
+					<div class="uk-button-group uk-flex-center" style="width: 100%">
+						<router-link to="/employee/consumed/create" tag="a" class="uk-button uk-button-primary">
+							Cadastrar Novo Consumo
+						</router-link>
+						<router-link to="/employee/consumed" tag="a" class="uk-button uk-button-secondary">
+							Visualizar Consumos
+						</router-link>
 					</div>
 				</div>
 			</div>

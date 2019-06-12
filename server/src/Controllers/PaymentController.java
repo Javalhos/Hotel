@@ -31,6 +31,14 @@ public class PaymentController extends Controller {
 		res.send(gson.toJson(payments));
 	}
 
+	@DynExpress(context = "/accpay/:acc")
+	public void accpay (Request req, Response res) {
+		int id = Integer.parseInt(req.getParam("acc"));
+ 		Collection<Payment> payments = paymentDAO.list("WHERE accomodation_id = '" + id +"' LIMIT 1");
+
+		res.send(gson.toJson(payments));
+	}
+
 	@DynExpress(context = "/payment/:id")
 	public void show (Request req, Response res) {
 		Payment payment = new Payment();

@@ -1,13 +1,13 @@
 <template>
 	<div>
 		<div class="uk-margin">
-			<div class="uk-card uk-card-default uk-card-body">
+			<div class="uk-card uk-card-default uk-card-body" v-if="form.accomodationType === 'ALUGUEL'">
 				<h3 class="uk-card-title">Confirme o CPF </h3>
 				<div class="uk-margin">
-					<label for="email" class="uk-form-label">Confirme o CPF do usuário para prosseguir com o registro da acomodação. Caso o 
+					<label for="text" class="uk-form-label">Confirme o CPF do usuário para prosseguir com o registro da acomodação. Caso o 
 					usuário ainda não estiver cadastrado, você será redirecionado à página de cadastros.</label>
 					<div class="uk-form-controls">
-						<input type="email" class="uk-input" id="email" placeholder="Ex.: 000.000.000-00" v-model="confcpf">
+						<input type="text" class="uk-input" id="text" placeholder="Ex.: 000.000.000-00" v-model="confcpf">
 					</div>
 				</div>
 				<button class="uk-button uk-button-primary" @click="searchCpf">Efetuar confirmação</button>
@@ -40,7 +40,7 @@
 								Reserva Efetuada Previamente
 							</label>
 						</div>
-						<div class="uk-margin" v-if="form.accomodationType === 'ALUGUEL'">
+						<div class="uk-margin">
 							<form class="uk-stacked">
 								<div class="uk-margin">
 									<label for="cpf" class="uk-form-label">CPF do Hóspede</label>
@@ -86,19 +86,32 @@
 										<input type="text" class="uk-input" placeholder="Valor total das diárias" v-model="form.accValue" disabled>
 									</div>
 								</div>
-								<button class="uk-button uk-button-primary" @click="registRental" :disabled="loading">
+								<button class="uk-button uk-button-primary" @click="registRental" :disabled="loading" v-if="form.accomodationType === 'ALUGUEL'">
 									<span uk-spinner="ratio: 0.5" v-if="loading"></span>
 									Criar aluguel
+								</button>
+								<button class="uk-button uk-button-primary" @click="bookingToRental" :disabled="loading" v-if="form.accomodationType === 'RESERVA'">
+									<span uk-spinner="ratio: 0.5" v-if="loading"></span>
+									Transformar em aluguel
 								</button>
 								<router-link to="/" tag="a" class="uk-button uk-button-default">Cancelar</router-link>
 							</form>
 						</div>
-						<div class="uk-margin" v-else>Tchau</div>
 					</div>
 				</div>
 			</div>
 			<div>
-				<div class="uk-margin">
+				<div class="uk-card uk-card-default uk-card-body" v-if="form.accomodationType === 'RESERVA'">
+					<h3 class="uk-card-title">Procurar reserva</h3>
+					<div class="uk-margin">
+						<label for="cpf" class="uk-form-label">Insira o CPF e a reserva será retornada para você.</label>
+						<div class="uk-form-controls">
+							<input type="text" class="uk-input" id="cpf" placeholder="Ex.: 000.000.000-00" v-model="getcpf">
+						</div>
+					</div>
+					<button class="uk-button uk-button-primary" @click="searchBooking">Procurar Reserva</button>
+				</div>
+				<div class="uk-margin" v-if="form.accomodationType === 'ALUGUEL'">
 					<div class="uk-card uk-card-default uk-card-body">
 						<form class="uk-grid-small" uk-grid>
 							<div class="uk-width-1-1">
@@ -130,6 +143,8 @@ export default {
 			diary: '',
 			start: '',
 			end: '',
+			getcpf: '',
+			bookingId: '',
 			form: new Form({
 				cpf: '',
 				room: '',
@@ -183,18 +198,58 @@ export default {
 				this.payment.status = 'PENDENTE'
 
 				this.registerPayment(this.payment)
+				this.$router.push('/employee/accomodations')
 			} catch ({ response, request, config }) {
 				console.log(response)
 				console.log(request)
 				console.log(config)
 			}
 		},
-		async registerPayment(payment) {
-			console.log("oie")
-			const { success } = await this.$http.post('/payment', payment)
-			console.log(success)
+		async searchBooking() {
+			const { data } = await this.$http.get(`/booking/${this.getcpf}`)
+			const booking = data[0]
 
-			this.$router.push('/')
+			this.bookingId = booking.id
+			this.form.accomodationType = booking.accomodationType
+			this.form.cpf = booking.cpf
+			this.start = booking.entryDate
+			this.end = booking.departureDate
+			this.form.room = booking.room
+			this.form.status = booking.status
+			this.form.entryDate = this.customFormatter(this.start)
+			this.form.departureDate = this.customFormatter(this.end)
+			let newD = moment(this.form.departureDate).diff(moment(this.form.entryDate), 'days')
+			this.form.accValue = Number(booking.accValue) * newD
+		},
+		async bookingToRental() {
+			this.loading = true
+			this.form.status = 'EM ANDAMENTO'
+			this.form.accomodationType = 'ALUGUEL'
+			this.form.id = this.bookingId
+			delete this.form.errors
+			delete this.form.originalData
+
+			console.log(this.form)
+			try {
+				const { success } = await this.$http.patch('/accomodation', this.form)
+				let data = await this.getAcc()
+				
+				this.payment.accId = data.id
+				this.payment.total = this.form.accValue
+				this.payment.status = 'PENDENTE'
+
+				this.registerPayment(this.payment)
+			} catch ({ request, response, config}) {
+				console.log(request)
+				console.log(response)
+				console.log(config)
+			} finally {
+				this.loading = false
+			}
+		},
+		async registerPayment(payment) {
+			const { success } = await this.$http.post('/payment', payment)
+			this.$router.push('/employee/accomodations')
 		},
 		async getAcc() {
 			const { data } = await this.$http.get(`/accomodation/${this.form.cpf}/${0}`)

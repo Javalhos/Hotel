@@ -45,6 +45,7 @@ public class AccomodationDAO implements DAO<Accomodation> {
 	}
 
 	public boolean update (Accomodation data) {
+		System.out.println(data);
 		sql = "UPDATE accomodations SET room = ?, cpf = ?, type = ?, " +
 		"entry_date = ?, departure_date = ?, status = ?, value = ? " +
 		"WHERE id = '" + data.getId() + "'";
@@ -60,6 +61,8 @@ public class AccomodationDAO implements DAO<Accomodation> {
 			pst.setString(5, data.getDepartureDate());
 			pst.setString(6, data.getStatus());
 			pst.setFloat(7, data.getAccValue());
+			// pst.setInt(8, data.getId());
+			System.out.println(pst);
 
 			if (pst.executeUpdate() > 0) {
 				DB.closeConnection();

@@ -42,6 +42,11 @@ Route.add('/', '').children(Route => {
 			Route.add('', 'Employee/Accomodation/List')
 			Route.add('create', 'Employee/Accomodation/Create')
 		})
+
+		Route.add('consumed', 'Employee/Consumed').children(() => {
+			Route.add('', 'Employee/Consumed/List')
+			Route.add('create', 'Employee/Consumed/Create')
+		})
 	})
 
 	Route.add('', 'Home', 'home')
