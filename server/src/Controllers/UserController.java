@@ -35,4 +35,15 @@ public class UserController extends Controller {
 		usr = userDAO.search(user);
 		res.send(gson.toJson(usr));
 	}
+
+	@DynExpress(context = "/user", method = RequestMethod.PATCH)
+	public void update (Request req, Response res) {
+		User user = this.parseBody(req, User.class);
+
+		CreateUserResponse result = new CreateUserResponse();
+
+		result.success = userDAO.update(user);
+		res.send(gson.toJson(result));
+	}
+
 }

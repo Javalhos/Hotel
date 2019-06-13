@@ -25,14 +25,12 @@ export default {
 		const { data } = await this.$http.get('/users')
 		this.users = data
 
-		if (success) {
-			this.users.map(u => {
-				if (this.u.cpf === this.user.cpf)
-					return
-				else
-					return u
-			})
-		}
+		this.users.map(u => {
+			if (this.u.cpf === this.$auth.user.cpf)
+				return
+			else
+				return u
+		})
 	}
 }
 </script>

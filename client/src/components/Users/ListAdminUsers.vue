@@ -20,12 +20,12 @@
 					<td v-else>Usuário</td>
 					<td>
 						<div class="uk-button-group">
-							<a href="#modal" class="uk-button uk-button-primary uk-button-small" uk-toggle>
+							<button href="#modal" class="uk-button uk-button-primary uk-button-small" @click="openUp(user)" uk-toggle>
 								<span uk-icon="icon: pencil"></span>
-							</a>
-							<div class="uk-button uk-button-danger uk-button-small" @click="destroy(user)">
+							</button>
+							<button class="uk-button uk-button-danger uk-button-small" @click="destroy(user)">
 								<span uk-icon="icon: trash"></span>
-							</div>
+							</button>
 						</div>
 					</td>
 				</tr>
@@ -74,6 +74,15 @@
 					</div>
 				</form>
 			</template>
+			<template v-slot:footer>
+				<div class="uk-margin">
+					<button class="uk-button uk-button-default uk-modal-close">Cancelar</button>
+					<button class="uk-button uk-button-primary" @click="update" :disabled="loading">
+						<span uk-spinner="ratio: 0.5" v-if="loading"></span>
+						Salvar Alterações
+					</button>
+				</div>
+			</template>
 		</modal>
 	</div>
 </template>
@@ -86,6 +95,7 @@ export default {
 	components: { Modal },
 	data() {
 		return {
+			loading: false,
 			form: new Form({
 				name: '',
 				cpf: '',
@@ -100,6 +110,25 @@ export default {
 		async destroy (user) {
 			const { success } = await this.$http.delete(`/user/${user.cpf}`)
 			Event.fire('deleted-user', user)
+		},
+		openUp(user) {
+			this.form.name = user.name
+			this.form.cpf = user.cpf
+			this.form.email = user.email
+			this.form.address = user.address
+			this.form.contactNumber = user.contactNumber
+			this.form.level = user.level			
+		},
+		async update() {
+			this.loading = true
+			try {
+				const { success } = await this.$http.patch('/user', this.form)
+				console.log(success)
+			} catch (e) {
+				console.log(e)
+			} finally {
+				this.loading = false
+			}
 		}
 	}
 }

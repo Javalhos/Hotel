@@ -11,10 +11,7 @@
 				<slot name="body"></slot>
 			</div>
 			<div class="uk-modal-footer uk-text-right">
-				<div class="uk-margin">
-					<button class="uk-button uk-button-default uk-modal-close">Cancelar</button>
-					<button class="uk-button uk-button-primary">Salvar Alterações</button>
-				</div>
+				<slot name="footer"></slot>
 			</div>
 		</div>
 	</div>

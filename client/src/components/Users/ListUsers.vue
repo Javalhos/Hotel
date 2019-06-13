@@ -11,14 +11,14 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="user in users" :key="user.cpf" v-if="!['USER', 'NULL'].includes(user.level)">
+				<tr v-for="user in onlyUsers" :key="user.cpf">
 					<td>{{ user.cpf }}</td>
 					<td>{{ user.name }}</td>
 					<td>{{ user.email }}</td>
 					<td>{{ user.contactNumber }}</td>
 					<td>
 						<div class="uk-button-group">
-							<a href="#modal" class="uk-button uk-button-primary uk-button-small" uk-toggle>
+							<a href="#modal" class="uk-button uk-button-primary uk-button-small" uk-toggle @click="openUp(user)">
 								<span uk-icon="icon: pencil"></span>
 							</a>
 						</div>
@@ -61,16 +61,16 @@
 							<input type="text" id="tel" class="uk-input" placeholder="Número para Contato" v-model="form.contactNumber">
 						</div>
 					</div>
-					<div class="uk-margin">
-						<label class="uk-form-label" for="level">Tipo de Acesso</label>
-						<div class="uk-form-controls">
-							<select class="uk-select" id="level" v-model="form.level">
-								<option value="EMPLOYEE">Funcionário</option>
-								<option value="ADMIN">Administrador</option>
-							</select>
-						</div>
-					</div>
 				</form>
+			</template>
+			<template v-slot:footer>
+				<div class="uk-margin">
+					<button class="uk-button uk-button-default uk-modal-close">Cancelar</button>
+					<button class="uk-button uk-button-primary" @click="update" :disabled="loading">
+						<span uk-spinner="ratio: 0.5" v-if="loading"></span>
+						Salvar Alterações
+					</button>
+				</div>
 			</template>
 		</modal>
 	</div>
@@ -84,13 +84,14 @@ export default {
 	components: { Modal },
 	data() {
 		return {
+			loading: false,
 			form: new Form({
 				name: '',
 				cpf: '',
 				email: '',
 				address: '',
 				contactNumber: '',
-				level: ''
+				level: 'USER'
 			})
 		}
 	},
@@ -98,6 +99,33 @@ export default {
 		async destroy (user) {
 			const { success } = await this.$http.delete(`/user/${user.cpf}`)
 			Event.fire('deleted-user', user)
+		},
+		openUp(user) {
+			this.form.name = user.name
+			this.form.cpf = user.cpf
+			this.form.email = user.email
+			this.form.address = user.address
+			this.form.contactNumber = user.contactNumber
+			this.form.level = user.level			
+		},
+		async update() {
+			this.loading = true
+			try {
+				const { success } = await this.$http.patch('/user', this.form)
+				console.log(success)
+			} catch (e) {
+				console.log(e)
+			} finally {
+				this.loading = false
+			}
+		}
+	},
+	computed: {
+		onlyUsers() {
+			return this.users.filter(u => {
+				if (u.level === 'USER')
+					return u
+			})
 		}
 	}
 }

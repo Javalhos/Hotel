@@ -41,7 +41,7 @@ public class UserDAO implements DAO<User> {
 	}
 
 	public boolean update (User data) {
-		sql = "UPDATE `users` SET `name` = ?, `email` = ?, `password` = ?, `contact_number` = ?, `address` = ?, `level` = ? WHERE `cpf` = ?";
+		sql = "UPDATE `users` SET `name` = ?, `email` = ?, `contact_number` = ?, `address` = ?, `level` = ? WHERE `cpf` = ?";
 				
 		try {
 			DB.openConnection();
@@ -49,11 +49,10 @@ public class UserDAO implements DAO<User> {
 
 			pst.setString(1, data.getName());
 			pst.setString(2, data.getEmail());
-			pst.setString(3, data.getPassword());
-			pst.setString(4, data.getContactNumber());
-			pst.setString(5, data.getAddress());
-			pst.setString(6, data.getLevel());
-			pst.setString(7, data.getCpf());
+			pst.setString(3, data.getContactNumber());
+			pst.setString(4, data.getAddress());
+			pst.setString(5, data.getLevel());
+			pst.setString(6, data.getCpf());
 
 			if (pst.executeUpdate() > 0) {
 				DB.closeConnection();

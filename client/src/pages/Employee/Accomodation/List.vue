@@ -4,10 +4,10 @@
         	<div class="uk-card uk-card-default uk-card-body">
 				<form class="uk-grid-small" uk-grid>
 					<div class="uk-width-1-1">
-						<input type="text" class="uk-input" placeholder="Pesquisar por um serviço consumido...">
+						<input type="text" class="uk-input" placeholder="Pesquisar por uma acomodação...">
 					</div>
 				</form>
-				<list-consumed :consumed="consumed"></list-consumed>
+				<list-accomodation :accomodations="accomodations"></list-accomodation>
 				<div class="uk-margin">
 					<router-link tag="a" to="/" class="uk-button uk-button-primary">
 						Voltar
@@ -19,17 +19,17 @@
 </template>
 
 <script>
-import ListConsumed from "../../../components/Consumed/ListConsumed"
+import ListAccomodation from "../../../components/ListAccomodation"
 export default {
-	components: { ListConsumed },
+	components: { ListAccomodation },
 	data() {
 		return {
-			consumed: []
+			accomodations: []
 		}
 	},
 	async created() {
-		const { data } = await this.$http.get('/consumeds')
-		this.consumed = data
+		const { data } = await this.$http.get('/accomodations')
+		this.accomodations = data
 	}
 }
 </script>
