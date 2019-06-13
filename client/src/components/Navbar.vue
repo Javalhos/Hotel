@@ -4,30 +4,28 @@
 			<nav uk-navbar>
 				<div class="uk-navbar-left">
 					<ul class="uk-navbar-nav">
-						<router-link tag="a" to="/">HOTELARIA CHERNOBYL</router-link>
+						<router-link tag="a" :to="homeLink">HOTELARIA CHERNOBYL</router-link>
 					</ul>
 				</div>
 				<div class="uk-navbar-right">
-					<ul class="uk-navbar-nav">
-						<template v-if="!isLoggedIn">
-							<router-link to="/auth/signup" tag="li">
-								<a>Registrar</a>
-							</router-link>
-							<router-link to="/auth/signin" tag="li">
-								<a>Entrar</a>
-							</router-link>
-						</template>
-						<template v-else>
-							<router-link to="/" tag="li">
-								<a>Início</a>
-							</router-link>
-							<router-link to="/admin" tag="li" v-if="user.level === 'ADMIN'">
-								<a>Administrador</a>
-							</router-link>
-							<li>
-								<a @click="logout">Sair</a>
-							</li>
-						</template>
+					<ul class="uk-navbar-nav" v-if="!isLoggedIn" :key="isLoggedIn">
+						<router-link to="/auth/signup" tag="li">
+							<a>Registrar</a>
+						</router-link>
+						<router-link to="/auth/signin" tag="li">
+							<a>Entrar</a>
+						</router-link>
+					</ul>
+					<ul class="uk-navbar-nav" v-else>
+						<router-link :to="homeLink" tag="li">
+							<a>Início</a>
+						</router-link>
+						<router-link to="/staff/admin" tag="li" v-if="$auth.isAdmin()">
+							<a>Administrador</a>
+						</router-link>
+						<li>
+							<a @click="logout">Sair</a>
+						</li>
 					</ul>
 				</div>
 			</nav>
@@ -40,20 +38,49 @@ import { Event } from '../common';
 
 export default {
 	created () {
-		console.log(this.user)
 		Event.listen('auth-status-changed', ({ signedIn }) => {
 			this.isLoggedIn = signedIn
+			this.getHomeLink()
 		})
 	},
 
 	data () {
 		return {
 			isLoggedIn: this.$auth.isSignedIn(),
-			user: this.$auth._user
+			homeLink: { name: 'home' },
+			user: this.$auth.user
 		}
 	},
 
+	computed: {
+	},
+
+	mounted () {
+		this.getHomeLink()
+	},
+
 	methods: {
+		getHomeLink () {
+			const homelink = this.homeLink
+			const { user } = this.$auth
+
+			if (!user) {
+				homelink.name = 'home'
+				return homelink
+			}
+			
+			switch (user.level) {
+				case 'EMPLOYEE':
+				case 'ADMIN':
+					homelink.name = 'staff'
+					break
+				default:
+					homelink.name = 'home'
+					break
+			}
+			return homelink
+		},
+
 		logout () {
 			this.$auth.signOut()
 			this.$router.push({ name: 'home' })

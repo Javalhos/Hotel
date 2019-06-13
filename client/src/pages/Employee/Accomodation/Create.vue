@@ -94,7 +94,7 @@
 									<span uk-spinner="ratio: 0.5" v-if="loading"></span>
 									Transformar em aluguel
 								</button>
-								<router-link to="/" tag="a" class="uk-button uk-button-default">Cancelar</router-link>
+								<router-link to="/staff" tag="a" class="uk-button uk-button-default">Cancelar</router-link>
 							</form>
 						</div>
 					</div>

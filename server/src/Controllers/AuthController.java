@@ -22,11 +22,27 @@ public class AuthController extends Controller {
 
 	@DynExpress(context = "/api/auth/signup", method = RequestMethod.POST)
 	public void signup (Request req, Response res) {
-		User user = parseBody(req, User.class);
+		User user =  new User();
+		User userPayload = new User();
+
+		userPayload = parseBody(req, User.class);
+		user = userDAO.search(userPayload);
 
 		SignUpResponse result = new SignUpResponse();
-		
-		result.success = userDAO.create(user);
+
+		if (user != null && (user.getPassword() == null || user.getPassword().equals(""))) {
+			if (userPayload.getPassword() == null || userPayload.getPassword().equals("")) {
+				res.setStatus(Status._400).send();
+				return;
+			}
+			user.setPassword(userPayload.getPassword());
+
+			result.success = userDAO.update(user);
+			res.send(gson.toJson(result));
+			return;
+		}
+
+		result.success = userDAO.create(userPayload);
 
 		res.send(gson.toJson(result));
 	}

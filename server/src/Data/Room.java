@@ -1,5 +1,7 @@
 package src.Data;
 
+import java.util.Collection;
+
 public class Room {
 	private int beds;
 	private int room;
@@ -7,6 +9,7 @@ public class Room {
 	private String extensionPhone;
 	private String status;
 	private float dailyRate;
+	private Collection<Accomodation> accomodations;
 
 	public Room() {
 	}
@@ -57,5 +60,13 @@ public class Room {
 
 	public float getDailyRate() {
 		return dailyRate;
+	}
+
+	public void setAccomodations (Collection<Accomodation> accomodations) {
+		this.accomodations = accomodations;
+	}
+
+	public Collection<Accomodation> getAccomodations () {
+		return this.accomodations;
 	}
 }

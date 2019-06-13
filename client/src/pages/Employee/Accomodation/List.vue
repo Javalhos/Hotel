@@ -9,7 +9,7 @@
 				</form>
 				<list-consumed :consumed="consumed"></list-consumed>
 				<div class="uk-margin">
-					<router-link tag="a" to="/" class="uk-button uk-button-primary">
+					<router-link tag="a" to="/staff" class="uk-button uk-button-primary">
 						Voltar
 					</router-link>
 				</div>

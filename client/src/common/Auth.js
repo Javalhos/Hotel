@@ -2,7 +2,6 @@
 import { Buffer } from 'buffer'
 
 import { Http } from './Http';
-import { Errors } from './Form';
 import { Event } from './Event';
 
 const TOKEN_KEY = 'hotel-auth-token'
@@ -41,6 +40,12 @@ export const Auth = {
 	get token () {
 		this._token = localStorage.getItem(TOKEN_KEY) || undefined
 		return this._token
+	},
+
+	isEmployee () {
+		if (!this.user)
+			return false
+		return this.user.level === 'EMPLOYEE'
 	},
 
 	isAdmin () {

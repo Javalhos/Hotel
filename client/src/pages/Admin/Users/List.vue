@@ -18,16 +18,17 @@ export default {
 	components: { ListAdminUsers },
 	data() {
 		return {
-			users: []
+			users: [],
+			user: this.$auth.user
 		}
 	},
 	async created() {
 		const { data } = await this.$http.get('/users')
 		this.users = data
 
-		if (success) {
+		if (this.users && this.users.length >= 0) {
 			this.users.map(u => {
-				if (this.u.cpf === this.user.cpf)
+				if (u.cpf === this.user.cpf)
 					return
 				else
 					return u

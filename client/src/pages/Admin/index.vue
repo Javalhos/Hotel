@@ -6,27 +6,27 @@
 					<li class="uk-parent">
 						<a><span class="uk-margin-small-right" uk-icon="icon: user"></span> Usuários</a>
 						<ul class="uk-nav-sub">
-							<li><router-link to="/admin/users" tag="a">Todos os Usuários</router-link></li>
-							<li><router-link to="/admin/users/create" tag="a">Novo Usuário do Sistema</router-link></li>
+							<li><router-link to="/staff/admin/users" tag="a">Todos os Usuários</router-link></li>
+							<li><router-link to="/staff/admin/users/create" tag="a">Novo Usuário do Sistema</router-link></li>
 						</ul>
 					</li>
 					<li class="uk-parent">
 						<a><span class="uk-margin-small-right" uk-icon="icon: home"></span> Hospedagens</a>
 						<ul class="uk-nav-sub">
-							<li><router-link to="/admin/accomodations" tag="a">Todos as Hospedagens</router-link></li>
+							<li><router-link to="/staff/admin/accomodations" tag="a">Todos as Hospedagens</router-link></li>
 						</ul>
 					</li>
 					<li class="uk-parent">
 						<a><span class="uk-margin-small-right" uk-icon="icon: credit-card"></span> Pagamentos</a>
 						<ul class="uk-nav-sub">
-							<li><router-link to="/admin/payments" tag="a">Todos os pagamentos</router-link></li>
+							<li><router-link to="/staff/admin/payments" tag="a">Todos os pagamentos</router-link></li>
 						</ul>
 					</li>
 					<li class="uk-parent">
 						<a><span class="uk-margin-small-right" uk-icon="icon: location"></span> Quartos</a>
 						<ul class="uk-nav-sub">
-							<li><router-link to="/admin/rooms" tag="a">Todos os Quartos</router-link></li>
-							<li><router-link to="/admin/rooms/create" tag="a">Novo Quarto</router-link></li>
+							<li><router-link to="/staff/admin/rooms" tag="a">Todos os Quartos</router-link></li>
+							<li><router-link to="/staff/admin/rooms/create" tag="a">Novo Quarto</router-link></li>
 						</ul>
 					</li>
 				</ul>

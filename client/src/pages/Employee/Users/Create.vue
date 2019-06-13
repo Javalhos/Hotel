@@ -45,7 +45,7 @@
 							<span uk-spinner="ratio: 0.5" v-if="registering"></span>
 							<span v-else>Registrar</span>
 						</button>
-						<router-link to="/" tag="a" class="uk-button uk-button-default">
+						<router-link to="/staff" tag="a" class="uk-button uk-button-default">
 							Cancelar
 						</router-link>
 					</div>

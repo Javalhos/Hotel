@@ -1,22 +1,83 @@
 package src.Controllers;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import express.DynExpress;
 import express.http.RequestMethod;
 import express.http.request.Request;
 import express.http.response.Response;
-
+import express.utils.Status;
 import src.Data.Accomodation;
+import src.Data.Room;
+import src.Data.User;
 import src.Models.AccomodationDAO;
+import src.Models.RoomDAO;
+import src.Models.UserDAO;
 
 public class AccomodationController extends Controller {
 
 	private final AccomodationDAO accomodationDAO = new AccomodationDAO();
+	private final RoomDAO roomDAO = new RoomDAO();
+	private final UserDAO userDAO = new UserDAO();
+
 	private class CreateAccomodationResponse {
 		@SuppressWarnings("unused")
 		public boolean success = false;
 	}
 
+	// Customer
+	@DynExpress(context = "/api/reservar", method = RequestMethod.POST)
+	public void reserve (Request req, Response res) {
+		Accomodation accomodation = parseBody(req, Accomodation.class);
+
+		Room room = new Room();
+		room.setRoom(accomodation.getRoom());
+		
+		room = roomDAO.search(room);
+
+		if (room == null) {
+			res.setStatus(Status._404).send();
+			return;
+		}
+
+		// VErifica se o quarto está disponível
+		String clause = "WHERE `room` = %d AND (`entry_date` BETWEEN CAST('%s' AS DATE) AND CAST('%s' AS DATE)) AND (`departure_date` BETWEEN CAST('%s' AS DATE) AND CAST('%s' AS DATE))";
+		clause = String.format(clause, room.getRoom(), accomodation.getEntryDate(), accomodation.getDepartureDate(), accomodation.getEntryDate(), accomodation.getDepartureDate());
+		Collection<Accomodation> accs = accomodationDAO.list(clause);
+
+		if (accs != null && !accs.isEmpty()) {
+			res.setStatus(Status._400).send();
+			return;
+		}
+
+		User user = new User();
+		user.setCpf(accomodation.getCpf());
+		user = userDAO.search(user);
+
+		if (user == null) {
+			res.setStatus(Status._404).send();
+			return;
+		}
+
+		LocalDate checkin = LocalDate.parse(accomodation.getEntryDate());
+		LocalDate checkout = LocalDate.parse(accomodation.getDepartureDate());
+
+		long days = ChronoUnit.DAYS.between(checkin, checkout);
+
+		float value = days * room.getDailyRate();
+
+		accomodation.setAccType("RESERVA");
+		accomodation.setStatus("PENDENTE");
+		accomodation.setAccValue(value);
+
+		CreateAccomodationResponse result = new CreateAccomodationResponse();
+
+		result.success = accomodationDAO.create(accomodation);
+		res.send(gson.toJson(result));
+	}
+
+	// Staff
 	@DynExpress(context = "/accomodations")
 	public void index (Request req, Response res) {
 		Collection<Accomodation> accomodations = accomodationDAO.list("");

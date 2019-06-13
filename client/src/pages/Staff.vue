@@ -20,10 +20,10 @@
 							realizar um novo aluguel!
 						</p>
 						<div class="uk-button-group uk-flex-center" style="width: 100%">
-							<router-link to="/employee/users/create" tag="a" class="uk-button uk-button-primary">
+							<router-link to="/staff/employee/users/create" tag="a" class="uk-button uk-button-primary">
 								Cadastrar Usuário
 							</router-link>
-    						<router-link to="/employee/users" tag="a" class="uk-button uk-button-secondary">
+    						<router-link to="/staff/employee/users" tag="a" class="uk-button uk-button-secondary">
 								Visualizar Usuários
 							</router-link>
 						</div>
@@ -36,10 +36,10 @@
 						com a acomodação.
 					</p>
 					<div class="uk-button-group uk-flex-center" style="width: 100%">
-						<router-link to="/employee/consumed/create" tag="a" class="uk-button uk-button-primary">
+						<router-link to="/staff/employee/consumed/create" tag="a" class="uk-button uk-button-primary">
 							Cadastrar Novo Consumo
 						</router-link>
-						<router-link to="/employee/consumed" tag="a" class="uk-button uk-button-secondary">
+						<router-link to="/staff/employee/consumed" tag="a" class="uk-button uk-button-secondary">
 							Visualizar Consumos
 						</router-link>
 					</div>
@@ -53,10 +53,10 @@
 						andamento. 
 					</p>
 					<div class="uk-button-group uk-flex-center" style="width: 100%">
-							<router-link to="/employee/acc/create" tag="a" class="uk-button uk-button-primary">
+							<router-link to="/staff/employee/acc/create" tag="a" class="uk-button uk-button-primary">
 								Registrar Aluguel
 							</router-link>
-    						<router-link to="/employee/acc" tag="a" class="uk-button uk-button-secondary">
+    						<router-link to="/staff/employee/acc" tag="a" class="uk-button uk-button-secondary">
 								Visualizar Hospedagens
 							</router-link>
 						</div>
@@ -68,10 +68,10 @@
 							Aqui você pode registrar um pagamento e finalizar uma hospedagem!
 						</p>
 						<div class="uk-button-group uk-flex-center" style="width: 100%">
-							<router-link to="/employee/payment/pay" tag="a" class="uk-button uk-button-primary">
+							<router-link to="/staff/employee/payment/pay" tag="a" class="uk-button uk-button-primary">
 								Registrar Pagamento
 							</router-link>
-							<router-link to="/employee/payment" tag="a" class="uk-button uk-button-secondary">
+							<router-link to="/staff/employee/payment" tag="a" class="uk-button uk-button-secondary">
 								Visualizar Pendencias
 							</router-link>
 						</div>

@@ -136,6 +136,7 @@ public class AccomodationDAO implements DAO<Accomodation> {
 			ResultSet rs = statement.executeQuery(sql);
 
 			Collection<Accomodation> accomodations = new ArrayList<Accomodation>();
+			
 			while (rs.next()) {
 				Accomodation accomodation = new Accomodation();
 

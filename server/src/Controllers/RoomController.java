@@ -7,11 +7,15 @@ import express.http.request.Request;
 import express.http.response.Response;
 import express.utils.Status;
 
+import src.Data.Accomodation;
 import src.Data.Room;
+import src.Models.AccomodationDAO;
 import src.Models.RoomDAO;
+
 public class RoomController extends Controller {
 
 	private final RoomDAO roomDAO = new RoomDAO();
+	private final AccomodationDAO acmdDAO = new AccomodationDAO();
 
 	private class CreateRoomResponse {
 		@SuppressWarnings("unused")
@@ -27,11 +31,12 @@ public class RoomController extends Controller {
 
 	@DynExpress(context = "/api/rooms/:id")
 	public void single (Request req, Response res) {
+		Collection<Accomodation> accomodations = new ArrayList<Accomodation>();
 		Room room = new Room();
 		room.setRoom(Integer.parseInt(req.getParam("id")));
 
 		room = roomDAO.search(room);
-		
+
 		if (room == null) {
 			res.setStatus(Status._404).send();
 			return;
@@ -41,6 +46,20 @@ public class RoomController extends Controller {
 			res.setStatus(Status._404).send();
 			return;
 		}
+
+		// Carregar as reservas desse quarto
+		String clause = " WHERE `room` = %d AND `type` = '%s' AND `status` = '%s' AND `departure_date` >= CURDATE()";
+		clause = String.format(clause, room.getRoom(), "RESERVA", "DISPONIVEL");
+		accomodations = acmdDAO.list(clause);
+
+		if (accomodations != null) {
+			for (Accomodation acmd : accomodations) {
+				// remove o cpf dos usuários que fizeram as reservas
+				acmd.setCpf(null);
+			}
+		}
+
+		room.setAccomodations(accomodations);
 
 		res.send(gson.toJson(room));
 	}
