@@ -42,7 +42,7 @@ public class AccomodationController extends Controller {
 		}
 
 		// VErifica se o quarto está disponível
-		String clause = "WHERE `room` = %d AND (`entry_date` BETWEEN CAST('%s' AS DATE) AND CAST('%s' AS DATE)) AND (`departure_date` BETWEEN CAST('%s' AS DATE) AND CAST('%s' AS DATE))";
+		String clause = "WHERE `room` = %d AND (`entry_date` BETWEEN CAST('%s' AS DATE) AND CAST('%s' AS DATE)) OR (`departure_date` BETWEEN CAST('%s' AS DATE) AND CAST('%s' AS DATE))";
 		clause = String.format(clause, room.getRoom(), accomodation.getEntryDate(), accomodation.getDepartureDate(), accomodation.getEntryDate(), accomodation.getDepartureDate());
 		Collection<Accomodation> accs = accomodationDAO.list(clause);
 

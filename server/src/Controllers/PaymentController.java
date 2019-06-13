@@ -39,15 +39,15 @@ public class PaymentController extends Controller {
 		res.send(gson.toJson(payments));
 	}
 
-	@DynExpress(context = "/payment/:id")
-	public void show (Request req, Response res) {
-		Payment payment = new Payment();
-		payment.setId(Integer.parseInt(req.getParam("id")));
+	// @DynExpress(context = "/payment/:id")
+	// public void show (Request req, Response res) {
+	// 	Payment payment = new Payment();
+	// 	payment.setId(Integer.parseInt(req.getParam("id")));
 
-		Object pay = new Object();
-		pay = paymentDAO.search(payment);
-		res.send(gson.toJson(pay));
-	}
+	// 	Object pay = new Object();
+	// 	pay = paymentDAO.search(payment);
+	// 	res.send(gson.toJson(pay));
+	// }
 
 	@DynExpress(context = "/payment", method = RequestMethod.POST)
 	public void store (Request req, Response res) {

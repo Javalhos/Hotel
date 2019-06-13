@@ -76,7 +76,7 @@ export default {
 				console.log(success)
 
 				if (success)
-					this.$router.push('/admin')
+					this.$router.push('/staff/admin')
 			} catch ({ request, response, config }) {
 				console.log(request)
 				console.log(response)

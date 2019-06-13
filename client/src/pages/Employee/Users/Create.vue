@@ -85,7 +85,7 @@ export default {
 				if (!success)
 					return alert('Erro!')
 				
-				this.$router.push('/employee/users')
+				this.$router.push('/staff/employee/users')
 			} catch ({ response, request, config }) {
 				console.log(response)
 				console.log(request)

@@ -48,7 +48,7 @@ public class RoomController extends Controller {
 		}
 
 		// Carregar as reservas desse quarto
-		String clause = " WHERE `room` = %d AND `type` = '%s' AND `status` = '%s' AND `departure_date` >= CURDATE()";
+		String clause = " WHERE `room` = %d AND `departure_date` >= CURDATE()";
 		clause = String.format(clause, room.getRoom(), "RESERVA", "DISPONIVEL");
 		accomodations = acmdDAO.list(clause);
 

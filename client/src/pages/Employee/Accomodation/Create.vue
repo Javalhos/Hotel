@@ -10,7 +10,7 @@
 						<input type="text" class="uk-input" id="text" placeholder="Ex.: 000.000.000-00" v-model="confcpf">
 					</div>
 				</div>
-				<button class="uk-button uk-button-primary" @click="searchCpf">Efetuar confirmação</button>
+				<button type="button" class="uk-button uk-button-primary" @click="searchCpf">Efetuar confirmação</button>
 			</div>
 		</div>
 		<div class="uk-child-width-1-2@m uk-grid-small uk-grid-match" uk-grid>
@@ -86,11 +86,11 @@
 										<input type="text" class="uk-input" placeholder="Valor total das diárias" v-model="form.accValue" disabled>
 									</div>
 								</div>
-								<button class="uk-button uk-button-primary" @click="registRental" :disabled="loading" v-if="form.accomodationType === 'ALUGUEL'">
+								<button type="button" class="uk-button uk-button-primary" @click="registRental" :disabled="loading" v-if="form.accomodationType === 'ALUGUEL'">
 									<span uk-spinner="ratio: 0.5" v-if="loading"></span>
 									Criar aluguel
 								</button>
-								<button class="uk-button uk-button-primary" @click="bookingToRental" :disabled="loading" v-if="form.accomodationType === 'RESERVA'">
+								<button type="button" class="uk-button uk-button-primary" @click="bookingToRental" :disabled="loading" v-if="form.accomodationType === 'RESERVA'">
 									<span uk-spinner="ratio: 0.5" v-if="loading"></span>
 									Transformar em aluguel
 								</button>
@@ -109,7 +109,7 @@
 							<input type="text" class="uk-input" id="cpf" placeholder="Ex.: 000.000.000-00" v-model="getcpf">
 						</div>
 					</div>
-					<button class="uk-button uk-button-primary" @click="searchBooking">Procurar Reserva</button>
+					<button type="button" class="uk-button uk-button-primary" @click="searchBooking">Procurar Reserva</button>
 				</div>
 				<div class="uk-margin" v-if="form.accomodationType === 'ALUGUEL'">
 					<div class="uk-card uk-card-default uk-card-body">
@@ -180,7 +180,7 @@ export default {
 			if (data) {
 				this.form.cpf = data.cpf
 			} else {
-				this.$router.push('/employee/users/create')
+				this.$router.push('/staff/employee/users/create')
 			}
 		},
 		async registRental() {
@@ -198,7 +198,7 @@ export default {
 				this.payment.status = 'PENDENTE'
 
 				this.registerPayment(this.payment)
-				this.$router.push('/employee/accomodations')
+				// this.$router.push('/staff/employee/accomodations')
 			} catch ({ response, request, config }) {
 				console.log(response)
 				console.log(request)
@@ -249,7 +249,7 @@ export default {
 		},
 		async registerPayment(payment) {
 			const { success } = await this.$http.post('/payment', payment)
-			this.$router.push('/employee/accomodations')
+			this.$router.push('/staff/employee/accomodations')
 		},
 		async getAcc() {
 			const { data } = await this.$http.get(`/accomodation/${this.form.cpf}/${0}`)

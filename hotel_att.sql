@@ -24,7 +24,7 @@ CREATE TABLE `rooms` (
 	`type` ENUM('NORMAL', 'LUXO', 'PRESIDENCIAL', 'SUITE') NOT NULL,
 	`beds` INT(2) NOT NULL,
 	`extension_phone` INT(2) NOT NULL,
-	`status` ENUM('DISPONÍVEL', 'RESERVADO', 'MANUTENCAO'),
+	`status` ENUM('DISPONIVEL', 'RESERVADO', 'MANUTENCAO'),
 	`daily_rate` FLOAT(5) NOT NULL,
 	PRIMARY KEY (room)
 );
@@ -56,7 +56,7 @@ CREATE TABLE `consumed_services` (
 CREATE TABLE `services` (
 	`id` INT(2) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(100) NOT NULL,
-	`description` VARCHAR(255) NOT NULL,
+	`description` VARCHAR(255) DEFAULT '',
 	`value` FLOAT(5) NOT NULL,
 	PRIMARY KEY(id)
 );
@@ -84,14 +84,14 @@ INSERT INTO `users` (`cpf`, `name`, `email`, `password`, `contact_number`, `addr
 
 -- Insert into Rooms
 INSERT INTO `rooms` (`room`, `type`, `beds`, `extension_phone`, `status`, `daily_rate`) VALUES
-('01', 'NORMAL', '2', '01', 'DISPONÍVEL', '150.00'),
-('02', 'NORMAL', '1', '02', 'DISPONÍVEL', '150.00'),
+('01', 'NORMAL', '2', '01', 'DISPONIVEL', '150.00'),
+('02', 'NORMAL', '1', '02', 'DISPONIVEL', '150.00'),
 ('03', 'NORMAL', '1', '03', 'RESERVADO', '150.00'),
 ('04', 'LUXO', '2', '04', 'RESERVADO', '250.00'),
-('05', 'LUXO', '2', '05', 'DISPONÍVEL', '250.00'),
+('05', 'LUXO', '2', '05', 'DISPONIVEL', '250.00'),
 ('06', 'LUXO', '3', '06', 'MANUTENCAO', '250.00'),
 ('07', 'PRESIDENCIAL', '1', '07', 'RESERVADO', '500.00'),
-('08', 'SUITE', '4', '08', 'DISPONÍVEL', '200.00');
+('08', 'SUITE', '4', '08', 'DISPONIVEL', '200.00');
 
 -- Insert into Services
 INSERT INTO `services` (`name`, `description`, `value`) VALUES
@@ -129,81 +129,81 @@ INSERT INTO `payment` (`accomodation_id`, `tax`, `services_value`, `total_value`
 ('2', '00.00', '60.00', '810.00', 'DINHEIRO', 'PAGO'),
 ('3', '00.00', '60.00', '810.00', 'CARTÃO', 'PENDENTE');
 
--- CRIAÇÃO DAS VIEWS
--- View que retorna apenas os usuários, excluindo os funcionários e administradores. 
-CREATE VIEW `customer` AS
-SELECT `u`.`name` AS 'Nome',
-		`u`.`cpf` AS 'CPF', 
-		`u`.`level` AS 'Tipo de Usuário', 
-		`acc`.`type` AS 'Tipo de Hospedagem',
-		`acc`.`value` AS 'Valor das Diárias'
-FROM `users` AS `u`
-INNER JOIN `accomodations` AS `acc`
-ON `u`.`cpf` = `acc`.`cpf`
-WHERE `u`.`level` = 'USER';
+-- -- CRIAÇÃO DAS VIEWS
+-- -- View que retorna apenas os usuários, excluindo os funcionários e administradores. 
+-- CREATE VIEW `customer` AS
+-- SELECT `u`.`name` AS 'Nome',
+-- 		`u`.`cpf` AS 'CPF', 
+-- 		`u`.`level` AS 'Tipo de Usuário', 
+-- 		`acc`.`type` AS 'Tipo de Hospedagem',
+-- 		`acc`.`value` AS 'Valor das Diárias'
+-- FROM `users` AS `u`
+-- INNER JOIN `accomodations` AS `acc`
+-- ON `u`.`cpf` = `acc`.`cpf`
+-- WHERE `u`.`level` = 'USER';
 
--- Seleciona a view "Customers".
-SELECT * FROM `customer`;
+-- -- Seleciona a view "Customers".
+-- SELECT * FROM `customer`;
 
--- View que retorna apenas as hospedagens que foram registradas como aluguel
--- e que são melhor que a média dos valores.
-CREATE VIEW `alugueis` AS
-SELECT `id` AS `Número do aluguel`,
-	`room` AS `Quarto`,
-	`cpf` AS `Cpf do Hóspede`,
-	`type` AS `Tipo de Hospedagem`,
-	`entry_date` AS `Data de Entrada`,
-	`departure_date` AS `Data de Saída`,
-	`status` AS `Estado da Hospedagem`,
-	`value` AS `Valor das Diárias`
-FROM `accomodations`
-WHERE `type` = 'ALUGUEL' AND `value` > (SELECT AVG(`value`) FROM `accomodations`);
+-- -- View que retorna apenas as hospedagens que foram registradas como aluguel
+-- -- e que são melhor que a média dos valores.
+-- CREATE VIEW `alugueis` AS
+-- SELECT `id` AS `Número do aluguel`,
+-- 	`room` AS `Quarto`,
+-- 	`cpf` AS `Cpf do Hóspede`,
+-- 	`type` AS `Tipo de Hospedagem`,
+-- 	`entry_date` AS `Data de Entrada`,
+-- 	`departure_date` AS `Data de Saída`,
+-- 	`status` AS `Estado da Hospedagem`,
+-- 	`value` AS `Valor das Diárias`
+-- FROM `accomodations`
+-- WHERE `type` = 'ALUGUEL' AND `value` > (SELECT AVG(`value`) FROM `accomodations`);
 
--- Seleciona a View "alugueis".
-SELECT * FROM `alugueis`;
+-- -- Seleciona a View "alugueis".
+-- SELECT * FROM `alugueis`;
 
--- STORED PROCEDURE
--- Stored Procedure que retorna os registros de acordo com o tipo de hospedagem.
-CREATE PROCEDURE Busca(in tipo VARCHAR(20))
-SELECT `room` AS `Quarto`,
-	`cpf` AS `CPF do Hóspede`,
-	`type` AS `Tipo de Hospedagem`,
-	`entry_date` AS `Data de Entrada`,
-	`departure_date` AS `Data de Saída`,
-	`status` AS `Estado da Hospedagem`,
-	`value` AS `Valor da Hospedagem`
-FROM `accomodations`
-WHERE `type` = tipo;
+-- -- STORED PROCEDURE
+-- -- Stored Procedure que retorna os registros de acordo com o tipo de hospedagem.
+-- CREATE PROCEDURE Busca(in tipo VARCHAR(20))
+-- SELECT `room` AS `Quarto`,
+-- 	`cpf` AS `CPF do Hóspede`,
+-- 	`type` AS `Tipo de Hospedagem`,
+-- 	`entry_date` AS `Data de Entrada`,
+-- 	`departure_date` AS `Data de Saída`,
+-- 	`status` AS `Estado da Hospedagem`,
+-- 	`value` AS `Valor da Hospedagem`
+-- FROM `accomodations`
+-- WHERE `type` = tipo;
 
--- Executa a Procedure
-CALL Busca('RESERVA');
+-- -- Executa a Procedure
+-- CALL Busca('RESERVA');
 
--- CRIAÇÃO DA SUBCONSULTA
--- Subconsulta que retorna apenas as hospedagens 
--- com valores maiores do que a média.
-SELECT * FROM `accomodations`
-WHERE `value` >
-(SELECT AVG(`value`) FROM `accomodations`);
+-- -- CRIAÇÃO DA SUBCONSULTA
+-- -- Subconsulta que retorna apenas as hospedagens 
+-- -- com valores maiores do que a média.
+-- SELECT * FROM `accomodations`
+-- WHERE `value` >
+-- (SELECT AVG(`value`) FROM `accomodations`);
 
--- CRIAÇÃO DO TRIGGER
--- Trigger que atualiza o valor dos serviços consumidos
--- na tabela "payment".
-DELIMITER ##
-CREATE TRIGGER AttValorServicos AFTER INSERT
-ON `consumed_services` 
-FOR EACH ROW
-BEGIN
-DECLARE newVal DECIMAL;
-SET newVal = (SELECT `value` FROM `consumed_services` WHERE `value` = NEW.`value` LIMIT 1);
-UPDATE `payment` SET `services_value` = `services_value` + newVal WHERE `accomodation_id` = NEW.`accomodation_id`;
-END##;
+-- -- CRIAÇÃO DO TRIGGER
+-- -- Trigger que atualiza o valor dos serviços consumidos
+-- -- na tabela "payment".
+-- DELIMITER ##
+-- CREATE TRIGGER AttValorServicos AFTER INSERT
+-- ON `consumed_services` 
+-- FOR EACH ROW
+-- BEGIN
+-- DECLARE newVal DECIMAL;
+-- SET newVal = (SELECT `value` FROM `consumed_services` WHERE `value` = NEW.`value` LIMIT 1);
+-- UPDATE `payment` SET `services_value` = `services_value` + newVal WHERE `accomodation_id` = NEW.`accomodation_id`;
+-- END##;
 
--- Seleciona a tabela payment para mostrar antes do TRIGGER
-SELECT * FROM `payment` WHERE `accomodation_id` = 1;
+-- -- Seleciona a tabela payment para mostrar antes do TRIGGER
+-- SELECT * FROM `payment` WHERE `accomodation_id` = 1;
 
--- Insere novo serviço consumido
-INSERT INTO `consumed_services` (`accomodation_id`, `service_id`, `name`, `value`)
-VALUES ('1', '1', 'Restaurante', '75.00');
+-- -- Insere novo serviço consumido
+-- INSERT INTO `consumed_services` (`accomodation_id`, `service_id`, `name`, `value`)
+-- VALUES ('1', '1', 'Restaurante', '75.00');
 
--- Seleciona a tabela payment para mostrar depois do TRIGGER
-SELECT * FROM `payment` WHERE `accomodation_id` = 1;
+-- -- Seleciona a tabela payment para mostrar depois do TRIGGER
+-- SELECT * FROM `payment` WHERE `accomodation_id` = 1;

@@ -4,7 +4,7 @@
 			<nav uk-navbar>
 				<div class="uk-navbar-left">
 					<ul class="uk-navbar-nav">
-						<router-link tag="a" :to="homeLink">HOTELARIA CHERNOBYL</router-link>
+						<router-link tag="a" :to="homeLink" :key="homeLink.name">HOTELARIA CHERNOBYL</router-link>
 					</ul>
 				</div>
 				<div class="uk-navbar-right">
@@ -16,8 +16,8 @@
 							<a>Entrar</a>
 						</router-link>
 					</ul>
-					<ul class="uk-navbar-nav" v-else>
-						<router-link :to="homeLink" tag="li">
+					<ul class="uk-navbar-nav" v-if="isLoggedIn">
+						<router-link :to="homeLink" tag="li" :key="homeLink.name">
 							<a>Início</a>
 						</router-link>
 						<router-link to="/staff/admin" tag="li" v-if="$auth.isAdmin()">

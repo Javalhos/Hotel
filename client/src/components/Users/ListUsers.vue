@@ -27,7 +27,7 @@
 			</tbody>
 		</table>
 		<div class="uk-margin">
-			<router-link class="uk-button uk-button-primary" tag="a" to="/">Voltar</router-link>
+			<router-link class="uk-button uk-button-primary" tag="a" to="/staff">Voltar</router-link>
 		</div>
 		<modal>
 			<template v-slot:header>

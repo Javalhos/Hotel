@@ -154,6 +154,7 @@ export default {
 					departureDate: this.dateTwo
 				})
 
+				this.$alert("Reserva efetuada com sucesso!", 'primary')
 				console.log("Resultado: ", data)
 			} catch (error) {
 				console.log(error.response, error.request, error.config)

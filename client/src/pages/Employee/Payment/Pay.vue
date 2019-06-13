@@ -143,7 +143,7 @@ export default {
 
 				const { success } = await this.$http.patch('/payment', this.form)
 
-				this.$router.push('/')
+				this.$router.push('/staff')
 			} catch ({ request, response, config }) {
 				console.log(request)
 				console.log(response)

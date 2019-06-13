@@ -22,6 +22,7 @@ const main = async () => {
 
 	Vue.prototype.$auth = Auth
 	Vue.prototype.$http = Http
+	Vue.prototype.$alert = UIkit.notification
 
 	await Auth.load()
 
